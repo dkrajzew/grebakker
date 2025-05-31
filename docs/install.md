@@ -6,25 +6,6 @@ __grebakker__ is a [Python](https://www.python.org/) script. To run it, you must
 
 ## Installing grebakker for Python
 
-The __current version__ is [grebakker-0.2.0](https://github.com/dkrajzew/grebakker/releases/tag/0.2.0).
-
-You have different options for installing __grebakker__.
-
-### Installing the package from PyPi
-
-You may __install grebakker__ using
-
-```console
-python -m pip install grebakker
-```
-
-You may consider building a virtual environment, first.
-
-You may then run __grebakker__ using 
-
-```console
-grebakker
-```
 
 
 ### Cloning the repository
@@ -42,21 +23,6 @@ You may then run __grebakker__ using
 python src/grebakker.py
 ```
 
-
-### Download the latest release
-
-Besides, you may __download the current release__ here:
-
-* [grebakker-0.2.0.zip](https://github.com/dkrajzew/grebakker/archive/refs/tags/0.2.0.zip)
-* [grebakker-0.2.0.tar.gz](https://github.com/dkrajzew/grebakker/archive/refs/tags/0.2.0.tar.gz)
-
-You will get the complete copy of the repository which you have to decompress. A folder named ```grebakker-0.2.0``` will be generated. __grebakker.py__ is stored in the ```src``` folder.
-
-You may run __grebakker__ using 
-
-```console
-python src/grebakker.py
-```
 
 
 ## Installing Python
