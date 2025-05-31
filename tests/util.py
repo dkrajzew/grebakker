@@ -92,9 +92,9 @@ def check_generated(tmp_path, actions, logpath, logformat, log_head="", testfile
             else:
                 assert bread(action[1]) == bread(action[2])
         elif action[0]=="compress":
-            c = bread(action[2])
-            with open(f"D:/{os.path.basename(action[2])}", "wb") as fd:
-                fd.write(c)
+            #c = bread(action[2])
+            #with open(f"D:/{os.path.basename(action[2])}", "wb") as fd:
+            #    fd.write(c)
             testfile = (action[4] + ".zip") if action[4] not in testfiles else testfiles[action[4]]
             assert bread(Path(TEST_PATH) / testfile) == bread(action[2])
         elif action[0]=="sub":
