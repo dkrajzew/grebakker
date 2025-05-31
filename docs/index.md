@@ -1,10 +1,6 @@
 [![License: GPL](https://img.shields.io/badge/License-GPL-green.svg)](https://github.com/dkrajzew/grebakker/blob/master/LICENSE)
-[![PyPI version](https://badge.fury.io/py/grebakker.svg)](https://pypi.python.org/pypi/grebakker)
 ![test](https://github.com/dkrajzew/grebakker/actions/workflows/test.yml/badge.svg)
-[![Downloads](https://pepy.tech/badge/grebakker)](https://pepy.tech/project/grebakker)
-[![Downloads](https://static.pepy.tech/badge/grebakker/week)](https://pepy.tech/project/grebakker)
 [![Coverage Status](https://coveralls.io/repos/github/dkrajzew/grebakker/badge.svg?branch=main)](https://coveralls.io/github/dkrajzew/grebakker?branch=main)
-[![Documentation Status](https://readthedocs.org/projects/grebakker/badge/?version=latest)](https://grebakker.readthedocs.io/en/latest/?badge=latest)
 [![Dependecies](https://img.shields.io/badge/dependencies-none-green)](https://img.shields.io/badge/dependencies-none-green)
 
 
