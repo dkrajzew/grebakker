@@ -65,7 +65,7 @@ The complete [ChangeLog](https://grebakker.readthedocs.io/en/latest/changes.) is
 
 ## License (GPL)
 
-__grebakker__ is licensed under the [GPL license](license.md).
+__grebakker__ is licensed under the [GPL license](LICENSE).
 
 
 
