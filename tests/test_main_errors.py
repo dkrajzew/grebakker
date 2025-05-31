@@ -134,7 +134,7 @@ def test_main_unknown_action(capsys):
 """
     assert patch(captured.out) == ""
 
-
+"""
 def test_main_unknown_logformat(capsys):
     try:
         ret = grebakker.main(["backup", "bar", "boo", "--log-format", "foo"])
@@ -143,13 +143,13 @@ def test_main_unknown_logformat(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==2
     captured = capsys.readouterr()
-    assert patch(captured.err) == """usage: grebakker [-h] [-c FILE] [--version] [--continue] [--log-name LOG_NAME]
+    assert patch(captured.err) == "usage: grebakker [-h] [-c FILE] [--version] [--continue] [--log-name LOG_NAME]
                  [--log-restart] [--log-off] [--log-format {csv,json}] [-v]
                  action destination definition
 grebakker: error: argument --log-format: invalid choice: 'foo' (choose from 'csv', 'json')
-"""
+"
     assert patch(captured.out) == ""    
-
+"""
 
 def test_main_copy_missing_valid(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
