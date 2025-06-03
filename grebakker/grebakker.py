@@ -218,7 +218,7 @@ class Grebakker:
                 return
             t1 = self._action_begin("Copying", src, level)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
-            shutil.copy(src, dst)
+            shutil.copy2(src, dst)
             self._action_end("copy", src, dst, level, t1)
         else:
             t1 = self._action_begin("Copying", src, level)
@@ -229,7 +229,7 @@ class Grebakker:
                     continue
                 fsrc = os.path.join(src, "..", file)
                 os.makedirs(os.path.dirname(fdst), exist_ok=True)
-                shutil.copy(fsrc, fdst)
+                shutil.copy2(fsrc, fdst)
             self._action_end("copy", src, dst, level, t1)
 
     def compress(self, root, item, dst_root, level):
@@ -302,7 +302,7 @@ class Grebakker:
                 continue
             self._log.write("sub", src, dst, "0:00:00")
             self.backup(os.path.join(root, sub), level+1)
-        shutil.copy(os.path.join(root, "grebakker.json"), dst_path)
+        shutil.copy2(os.path.join(root, "grebakker.json"), dst_path)
         if level==0:
             self._log.close()
             if self._log._written!=0:
