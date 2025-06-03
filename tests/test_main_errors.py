@@ -146,7 +146,7 @@ def test_main_unknown_logformat(capsys):
     assert patch(captured.err) == """usage: grebakker [-h] [-c FILE] [--version] [--continue] [--log-name LOG_NAME]
                  [--log-restart] [--log-off] [--log-format {csv,json}] [-v]
                  action destination definition
-grebakker: error: argument --log-format: invalid choice: 'foo' (choose from 'csv', 'json')
+grebakker: error: argument --log-format: invalid choice: 'foo' (choose from csv, json)
 """
     assert patch(captured.out) == ""    
 
