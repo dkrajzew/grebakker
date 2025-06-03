@@ -36,7 +36,17 @@ from typing import Any
 
 # --- class definitions -----------------------------------------------------
 class Log:
+    """Handles logging of performed actions in CSV or JSON format."""
+
     def __init__(self, name, restart, log_format, off):
+        """Initializes the Log object.
+
+        Args:
+            name (str): Path to the log file.
+            restart (bool): If True, overwrites the existing log file.
+            log_format (str): Format of the log ('csv' or 'json').
+            off (bool): If True, disables logging.
+        """
         self._format = log_format
         self._written = 0
         self._output = None
@@ -48,6 +58,14 @@ class Log:
             self._output.write(f'[\n')
 
     def write(self, act, src, dst, duration):
+        """Writes a log entry.
+
+        Args:
+            act (str): Action performed.
+            src (str): Source path.
+            dst (str): Destination path.
+            duration (str): Duration of the action.
+        """
         if self._output is None:
             return
         if self._format=="csv":
@@ -60,6 +78,7 @@ class Log:
         self._written += 1
         
     def close(self):
+        """Closes the log file."""
         if self._output is None:
             return
         if self._format=="json":
@@ -68,28 +87,63 @@ class Log:
         
 
 class Grebakker:
+    """Performs backup operations."""
+
     def __init__(self, dest, log, verbosity):
+        """Initializes the Grebakker object.
+
+        Args:
+            dest (str): Destination directory for backups.
+            log (Log): Log object for recording actions.
+            verbosity (int): Verbosity level for output.
+        """
         self._dest = dest
         self._log = log
         self._verbosity = verbosity
         self._line_ended = True
 
-    
     def _action_begin(self, mml_action, path, level):
+        """Marks the beginning of an action.
+
+        Args:
+            mml_action (str): Description of the action.
+            path (str): Path involved in the action.
+            level (int): Indentation level.
+
+        Returns:
+            (datetime.datetime): Start time of the action.
+        """
         if self._verbosity>1:
             print(f"{self._i(level+1)}{mml_action} '{path}'... ", end="", flush=True)
             self._line_ended = False
         return datetime.datetime.now()
 
-
     def _action_end(self, action, path, dst, level, t1):
+        """Marks the end of an action and logs it.
+
+        Args:
+            action (str): Action performed.
+            path (str): Source path.
+            dst (str): Destination path.
+            level (int): Indentation level.
+            t1 (datetime.datetime): Start time of the action.
+        """
         t2 = datetime.datetime.now()
         self._log.write(action, path, dst, str(t2-t1))
         if self._verbosity>1:
             print(f"done. ({t2-t1})")
             self._line_ended = True
-
+            
     def _yield_files(self, src, exclude):
+        """Yields files from the source directory, excluding specified patterns.
+
+        Args:
+            src (str): Source directory.
+            exclude (List[str]): List of patterns to exclude.
+
+        Yields:
+            source_path (str): Relative path to each file.
+        """
         for root, dirs, files in os.walk(src):
             dirs[:] = [d for d in dirs if d not in exclude]
             for file in files:
@@ -102,13 +156,32 @@ class Grebakker:
                 if not use:
                     continue
                 yield os.path.relpath(os.path.join(root, file), os.path.join(src, ".."))
-
     
     def _i(self, level):
+        """Returns indentation spaces for the given output level.
 
+        Args:
+            level (int): Indentation level.
+
+        Returns:
+            (str): Indentation spaces.
+        """
         return ' '*level
     
     def _get_destination(self, action, src, dst_root, path, extension, level):
+        """Determines the destination path for an action.
+
+        Args:
+            action (str): Action being performed.
+            src (str): Source path.
+            dst_root (str): Root destination directory.
+            path (str): Relative path from the source.
+            extension (str): File extension to append.
+            level (int): Indentation level.
+
+        Returns:
+            (str or None): Destination path or None if the destination file exists.
+        """
         dst = os.path.join(dst_root, path) + extension
         #print(f"dst {dst}")
         if os.path.exists(dst):
@@ -121,8 +194,18 @@ class Grebakker:
             return None
         return dst
 
-
     def copy(self, src_root, item, dst_root, level):
+        """Copies files or directories from source to destination.
+
+        Args:
+            src_root (str): Root source directory.
+            item (str or Dict[str, str]): Item to copy. If dict, may contain 'name' and 'exclude'.
+            dst_root (str): Root destination directory.
+            level (int): Reporting level.
+
+        Raises:
+            FileNotFoundError: If the source path does not exist.
+        """
         path = item if isinstance(item, str) else item["name"]
         exclude = [] if isinstance(item, str) or "exclude" not in item else item["exclude"]
         exclude = [exclude] if isinstance(exclude, str) else exclude
@@ -148,9 +231,19 @@ class Grebakker:
                 os.makedirs(os.path.dirname(fdst), exist_ok=True)
                 shutil.copy(fsrc, fdst)
             self._action_end("copy", src, dst, level, t1)
-        
 
     def compress(self, root, item, dst_root, level):
+        """Compresses files or directories into a ZIP archive.
+
+        Args:
+            root (str): Root source directory.
+            item (str or Dict[str, str]): Item to compress. If dict, may contain 'name' and 'exclude'.
+            dst_root (str): Root destination directory.
+            level (int): Reporting level.
+
+        Raises:
+            FileNotFoundError: If the source path does not exist.
+        """
         path = item if isinstance(item, str) else item["name"]
         exclude = [] if isinstance(item, str) or "exclude" not in item else item["exclude"]
         exclude = [exclude] if isinstance(exclude, str) else exclude
@@ -173,8 +266,13 @@ class Grebakker:
         zipf.close()
         self._action_end("compress", src, dst, level, t1)
 
-        
     def backup(self, root, level=0):
+        """Performs a backup
+
+        Args:
+            root (str): Root source directory.
+            level (int): Reporting level.
+        """
         # init
         if self._verbosity>0:
             print(f"{self._i(level)}Processing '{root}'...")
