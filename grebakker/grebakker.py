@@ -95,16 +95,12 @@ class Grebakker:
             for file in files:
                 srcf = os.path.relpath(os.path.join(root, file), src)
                 use = True
-                #print(f"{exclude}")
                 for e in exclude:
                     if fnmatch.fnmatchcase(srcf, e):
-                        #print(f"{srcf} {e}")
                         use = False
                         break
-                #print(f"{file} {use}")
                 if not use:
                     continue
-                #print(f"!!! {file}")
                 yield os.path.relpath(os.path.join(root, file), os.path.join(src, ".."))
 
     
