@@ -75,17 +75,13 @@ class Grebakker:
         self._line_ended = True
 
     
-    def get_indent(self, level):
-        return ' '*level
-
-    
     def report(self, act, src, dst, duration):
         self._log.write(act, src, dst, duration)
 
     
     def action_begin(self, mml_action, path, level):
         if self._verbosity>1:
-            print(f"{self.get_indent(level+1)}{mml_action} '{path}'... ", end="", flush=True)
+            print(f"{self._i(level+1)}{mml_action} '{path}'... ", end="", flush=True)
             self._line_ended = False
         return datetime.datetime.now()
 
@@ -116,6 +112,10 @@ class Grebakker:
                 yield os.path.relpath(os.path.join(root, file), os.path.join(src, ".."))
 
     
+    def _i(self, level):
+
+        return ' '*level
+    
     def get_destination(self, action, src, dst_root, path, extension, level):
         dst = os.path.join(dst_root, path) + extension
         #print(f"dst {dst}")
@@ -125,7 +125,7 @@ class Grebakker:
                 if not self._line_ended:
                     print()
                     self._line_ended = True
-                print(f"{self.get_indent(level+1)}Skipping '{dst}' - exists.")
+                print(f"{self._i(level+1)}Skipping '{dst}' - exists.")
             return None
         return dst
 
@@ -185,7 +185,7 @@ class Grebakker:
     def backup(self, root, level=0):
         # init
         if self._verbosity>0:
-            print(f"{self.get_indent(level)}Processing '{root}'...")
+            print(f"{self._i(level)}Processing '{root}'...")
             self._line_ended = True
         definition = None
         with open(os.path.join(root, "grebakker.json"), encoding="utf-8") as fd:
@@ -222,7 +222,7 @@ class Grebakker:
     def restore(self, root, level=0):
         # init
         if self._verbosity>0:
-            print(f"{self.get_indent(level)}Processing {root}...")
+            print(f"{self._i(level)}Processing {root}...")
         definition = None
         with open(os.path.join(root, "grebakker.json"), encoding="utf-8") as fd:
             definition = json.load(fd)
