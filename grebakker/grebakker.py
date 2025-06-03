@@ -75,14 +75,14 @@ class Grebakker:
         self._line_ended = True
 
     
-    def action_begin(self, mml_action, path, level):
+    def _action_begin(self, mml_action, path, level):
         if self._verbosity>1:
             print(f"{self._i(level+1)}{mml_action} '{path}'... ", end="", flush=True)
             self._line_ended = False
         return datetime.datetime.now()
 
 
-    def action_end(self, action, path, dst, level, t1):
+    def _action_end(self, action, path, dst, level, t1):
         t2 = datetime.datetime.now()
         self._log.write(action, path, dst, str(t2-t1))
         if self._verbosity>1:
@@ -133,12 +133,12 @@ class Grebakker:
             dst = self._get_destination("copy", src, dst_root, path, "", level)
             if dst is None:
                 return
-            t1 = self.action_begin("Copying", src, level)
+            t1 = self._action_begin("Copying", src, level)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy(src, dst)
-            self.action_end("copy", src, dst, level, t1)
+            self._action_end("copy", src, dst, level, t1)
         else:
-            t1 = self.action_begin("Copying", src, level)
+            t1 = self._action_begin("Copying", src, level)
             dst = os.path.join(dst_root, path)
             for file in self._yield_files(src, exclude):
                 fdst = self._get_destination("copy", os.path.join(src, file), dst_root, file, "", level+1)
@@ -147,7 +147,7 @@ class Grebakker:
                 fsrc = os.path.join(src, "..", file)
                 os.makedirs(os.path.dirname(fdst), exist_ok=True)
                 shutil.copy(fsrc, fdst)
-            self.action_end("copy", src, dst, level, t1)
+            self._action_end("copy", src, dst, level, t1)
         
 
     def compress(self, root, item, dst_root, level):
@@ -160,7 +160,7 @@ class Grebakker:
         dst = self._get_destination("compress", src, dst_root, path, ".zip", level)
         if dst is None:
             return
-        t1 = self.action_begin("Compressing", src, level)
+        t1 = self._action_begin("Compressing", src, level)
         zipf = zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED, compresslevel=9)
         if os.path.isfile(src):
             dstf = os.path.relpath(src, os.path.join(src, '..'))
@@ -171,7 +171,7 @@ class Grebakker:
                 dstf = os.path.relpath(os.path.join(root, file), os.path.join(src, '..'))
                 zipf.write(fsrc, dstf)
         zipf.close()
-        self.action_end("compress", src, dst, level, t1)
+        self._action_end("compress", src, dst, level, t1)
 
         
     def backup(self, root, level=0):
