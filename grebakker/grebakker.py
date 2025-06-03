@@ -123,9 +123,9 @@ class Grebakker:
 
 
     def copy(self, src_root, item, dst_root, level):
-        path = item if type(item)==str else item["name"]
-        exclude = [] if type(item)==str or "exclude" not in item else item["exclude"]
-        exclude = [exclude] if type(exclude)==str else exclude
+        path = item if isinstance(item, str) else item["name"]
+        exclude = [] if isinstance(item, str) or "exclude" not in item else item["exclude"]
+        exclude = [exclude] if isinstance(exclude, str) else exclude
         src = os.path.join(src_root, path)
         if not os.path.exists(src):
             raise FileNotFoundError(f"file/folder '{src}' to copy does not exist")
@@ -151,9 +151,9 @@ class Grebakker:
         
 
     def compress(self, root, item, dst_root, level):
-        path = item if type(item)==str else item["name"]
-        exclude = [] if type(item)==str or "exclude" not in item else item["exclude"]
-        exclude = [exclude] if type(exclude)==str else exclude
+        path = item if isinstance(item, str) else item["name"]
+        exclude = [] if isinstance(item, str) or "exclude" not in item else item["exclude"]
+        exclude = [exclude] if isinstance(exclude, str) else exclude
         src = os.path.join(root, path)
         if not os.path.exists(src):
             raise FileNotFoundError(f"file/folder '{src}' to compress does not exist")
