@@ -75,10 +75,6 @@ class Grebakker:
         self._line_ended = True
 
     
-    def report(self, act, src, dst, duration):
-        self._log.write(act, src, dst, duration)
-
-    
     def action_begin(self, mml_action, path, level):
         if self._verbosity>1:
             print(f"{self._i(level+1)}{mml_action} '{path}'... ", end="", flush=True)
@@ -88,7 +84,7 @@ class Grebakker:
 
     def action_end(self, action, path, dst, level, t1):
         t2 = datetime.datetime.now()
-        self.report(action, path, dst, str(t2-t1))
+        self._log.write(action, path, dst, str(t2-t1))
         if self._verbosity>1:
             print(f"done. ({t2-t1})")
             self._line_ended = True
@@ -120,7 +116,7 @@ class Grebakker:
         dst = os.path.join(dst_root, path) + extension
         #print(f"dst {dst}")
         if os.path.exists(dst):
-            self.report(action, src, dst, "skipped")
+            self._log.write(action, src, dst, "skipped")
             if self._verbosity>1:
                 if not self._line_ended:
                     print()
