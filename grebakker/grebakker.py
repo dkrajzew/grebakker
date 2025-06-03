@@ -141,7 +141,7 @@ class Grebakker:
             t1 = self.action_begin("Copying", src, level)
             dst = os.path.join(dst_root, path)
             for file in self._yield_files(src, exclude):
-                fdst = self.get_destination("copy", os.path.join(src, file), dst_root, file, "", level+1)
+                fdst = self._get_destination("copy", os.path.join(src, file), dst_root, file, "", level+1)
                 if fdst is None:
                     continue
                 fsrc = os.path.join(src, "..", file)
