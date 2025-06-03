@@ -128,7 +128,7 @@ class Grebakker:
         exclude = [exclude] if type(exclude)==str else exclude
         src = os.path.join(src_root, path)
         if not os.path.exists(src):
-            raise ValueError(f"file/folder '{src}' to copy does not exist")
+            raise FileNotFoundError(f"file/folder '{src}' to copy does not exist")
         if os.path.isfile(src):
             dst = self.get_destination("copy", src, dst_root, path, "", level)
             if dst is None:
@@ -156,7 +156,7 @@ class Grebakker:
         exclude = [exclude] if type(exclude)==str else exclude
         src = os.path.join(root, path)
         if not os.path.exists(src):
-            raise ValueError(f"file/folder '{src}' to compress does not exist")
+            raise FileNotFoundError(f"file/folder '{src}' to compress does not exist")
         dst = self.get_destination("compress", src, dst_root, path, ".zip", level)
         if dst is None:
             return
@@ -198,7 +198,7 @@ class Grebakker:
             path = sub if type(sub)==str else sub["name"]
             src = os.path.join(root, path)
             if not os.path.exists(src):
-                raise ValueError(f"file/folder '{src}' to recurse into does not exist")
+                raise FileNotFoundError(f"file/folder '{src}' to recurse into does not exist")
             dst = self.get_destination("sub", src, dst_path, path, "", level)
             if dst is None:
                 continue
@@ -315,7 +315,7 @@ def main(arguments : List[str] = None) -> int:
     if args.action=="backup":
         try:
             grebakker.backup(args.definition)
-        except ValueError as e:
+        except FileNotFoundError as e:
             print(f"grebakker: error: {e}.", file=sys.stderr)
             ret = 2
     t2 = datetime.datetime.now()
