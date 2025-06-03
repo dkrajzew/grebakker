@@ -108,7 +108,7 @@ class Grebakker:
 
         return ' '*level
     
-    def get_destination(self, action, src, dst_root, path, extension, level):
+    def _get_destination(self, action, src, dst_root, path, extension, level):
         dst = os.path.join(dst_root, path) + extension
         #print(f"dst {dst}")
         if os.path.exists(dst):
@@ -130,7 +130,7 @@ class Grebakker:
         if not os.path.exists(src):
             raise FileNotFoundError(f"file/folder '{src}' to copy does not exist")
         if os.path.isfile(src):
-            dst = self.get_destination("copy", src, dst_root, path, "", level)
+            dst = self._get_destination("copy", src, dst_root, path, "", level)
             if dst is None:
                 return
             t1 = self.action_begin("Copying", src, level)
@@ -157,7 +157,7 @@ class Grebakker:
         src = os.path.join(root, path)
         if not os.path.exists(src):
             raise FileNotFoundError(f"file/folder '{src}' to compress does not exist")
-        dst = self.get_destination("compress", src, dst_root, path, ".zip", level)
+        dst = self._get_destination("compress", src, dst_root, path, ".zip", level)
         if dst is None:
             return
         t1 = self.action_begin("Compressing", src, level)
@@ -199,7 +199,7 @@ class Grebakker:
             src = os.path.join(root, path)
             if not os.path.exists(src):
                 raise FileNotFoundError(f"file/folder '{src}' to recurse into does not exist")
-            dst = self.get_destination("sub", src, dst_path, path, "", level)
+            dst = self._get_destination("sub", src, dst_path, path, "", level)
             if dst is None:
                 continue
             self._log.write("sub", src, dst, "0:00:00")
