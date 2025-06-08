@@ -82,6 +82,32 @@ def prepare(definition, testdata_folder, tmp_path, skipped=[], add_defs={}):
 
 
 
+# https://stackoverflow.com/questions/66524269/how-to-compare-files-in-two-zip-file-are-totally-same-or-not
+def are_equivalent(filename1, filename2):
+    """Compare two ZipFiles to see if they would expand into the same directory structure
+    without actually extracting the files.
+    """
+    
+    with ZipFile(filename1, 'r') as zip1, ZipFile(filename2, 'r') as zip2:
+        
+        # Index items in the ZipFiles by filename. For duplicate filenames, a later
+        # item in the ZipFile will overwrite an ealier item; just like a later file
+        # will overwrite an earlier file with the same name when extracting.
+        zipinfo1 = {info.filename:info for info in zip1.infolist()}
+        zipinfo2 = {info.filename:info for info in zip2.infolist()}
+        
+        # Do some simple checks first
+        # Do the ZipFiles contain the same the files?
+        if zipinfo1.keys() != zipinfo2.keys():
+            return False # pragma: no cover
+        
+        # Do the files in the archives have the same CRCs? (This is a 32-bit CRC of the
+        # uncompressed item. Is that good enough to confirm the files are the same?)
+        if any(zipinfo1[name].CRC != zipinfo2[name].CRC for name in zipinfo1.keys()):
+            return False # pragma: no cover
+    return True
+
+
 def check_generated(tmp_path, actions, logpath, logformat, log_head="", testfiles={}):
     # check files
     for action in actions:
@@ -95,7 +121,7 @@ def check_generated(tmp_path, actions, logpath, logformat, log_head="", testfile
             #with open(f"D:/{os.path.basename(action[2])}", "wb") as fd:
             #    fd.write(c)
             testfile = (action[4] + ".zip") if action[4] not in testfiles else testfiles[action[4]]
-            #assert bread(Path(TEST_PATH) / testfile) == bread(action[2])
+            assert are_equivalent(os.path.join(TEST_PATH, testfile), str(action[2]))
         elif action[0]=="sub":
             continue
         else:
