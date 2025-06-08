@@ -21,6 +21,8 @@ import os
 import shutil
 import re
 import json
+import zipfile
+from zipfile import ZipFile
 TEST_PATH = os.path.split(__file__)[0]
 import errno
 from pathlib import Path
@@ -59,17 +61,14 @@ def prepare(definition, testdata_folder, tmp_path, skipped=[], add_defs={}):
     src = Path(tmp_path) / testdata_folder
     dst = Path(tmp_path) / "backup" / d["destination"]
     #os.makedirs(dst)
-    l = [] if "copy" not in d else d["copy"]
-    for c in l:
+    for c in [] if "copy" not in d else d["copy"]:
         path = c if type(c)==str else c["name"]
         actions.append(["copy", src / path, dst / path, "skipped" if path in skipped else "<DUR>"])
-    l = [] if "compress" not in d else d["compress"]
-    for c in l:
+    for c in [] if "compress" not in d else d["compress"]:
         path = c if type(c)==str else c["name"]
         dur = "skipped" if path in skipped else "<DUR>"
         actions.append(["compress", src / path, dst / (path + ".zip"), dur, path]) # !!!
-    l = [] if "subfolders" not in d else d["subfolders"]
-    for c in l:
+    for c in [] if "subfolders" not in d else d["subfolders"]:
         path = c if type(c)==str else c["name"]
         actions.append(["sub", src / c, dst / path, "skipped" if path in skipped else "<DUR>"])
         #print(actions[-1])

@@ -58,7 +58,7 @@ class Log:
             self._output.write(f'[\n')
 
     def write(self, act, src, dst, duration):
-        """Writes a log entry.
+        """Writes a log entry about a performed action.
 
         Args:
             act (str): Action performed.
@@ -74,6 +74,23 @@ class Log:
             if self._written!=0:
                 self._output.write(',\n')
             self._output.write('    {"action": "' + act + '", "src": "' + src + '", "dst": "' + dst + '", "duration": "' + duration + '"}')
+        self._output.flush()
+        self._written += 1
+        
+    def error(self, error):
+        """Writes a log entry about an error.
+
+        Args:
+            error (str): The error occured.
+        """
+        if self._output is None:
+            return
+        if self._format=="csv":
+            self._output.write(f'"{error}"\n')
+        elif self._format=="json":
+            if self._written!=0:
+                self._output.write(',\n')
+            self._output.write('    {"error": "' + error + '"}')
         self._output.flush()
         self._written += 1
         
@@ -167,32 +184,28 @@ class Grebakker:
             (str): Indentation spaces.
         """
         return ' '*level
-    
-    def _get_destination(self, action, src, dst_root, path, extension, level):
+
+    def _destination_exists(self, action, src, dst, level):
         """Determines the destination path for an action.
 
         Args:
             action (str): Action being performed.
             src (str): Source path.
-            dst_root (str): Root destination directory.
-            path (str): Relative path from the source.
-            extension (str): File extension to append.
             level (int): Indentation level.
 
         Returns:
             (str or None): Destination path or None if the destination file exists.
         """
-        dst = os.path.join(dst_root, path) + extension
-        #print(f"dst {dst}")
-        if os.path.exists(dst):
-            self._log.write(action, src, dst, "skipped")
-            if self._verbosity>1:
-                if not self._line_ended:
-                    print()
-                    self._line_ended = True
-                print(f"{self._i(level+1)}Skipping '{dst}' - exists.")
-            return None
-        return dst
+        if not os.path.exists(dst):
+            return False
+        self._log.write(action, src, dst, "skipped")
+        if self._verbosity>1:
+            if not self._line_ended:
+                print()
+                self._line_ended = True
+            print(f"{self._i(level+1)}Skipping '{dst}' - exists.")
+        return True
+
 
     def copy(self, src_root, item, dst_root, level):
         """Copies files or directories from source to destination.
@@ -207,30 +220,31 @@ class Grebakker:
             FileNotFoundError: If the source path does not exist.
         """
         path = item if isinstance(item, str) else item["name"]
-        exclude = [] if isinstance(item, str) or "exclude" not in item else item["exclude"]
-        exclude = [exclude] if isinstance(exclude, str) else exclude
         src = os.path.join(src_root, path)
         if not os.path.exists(src):
+            self._log.error(f"file/folder '{src}' to copy does not exist")
             raise FileNotFoundError(f"file/folder '{src}' to copy does not exist")
+        dst = os.path.join(dst_root, path)
         if os.path.isfile(src):
-            dst = self._get_destination("copy", src, dst_root, path, "", level)
-            if dst is None:
+            if self._destination_exists("copy", src, dst, level):
                 return
             t1 = self._action_begin("Copying", src, level)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy2(src, dst)
             self._action_end("copy", src, dst, level, t1)
-        else:
-            t1 = self._action_begin("Copying", src, level)
-            dst = os.path.join(dst_root, path)
-            for file in self._yield_files(src, exclude):
-                fdst = self._get_destination("copy", os.path.join(src, file), dst_root, file, "", level+1)
-                if fdst is None:
-                    continue
-                fsrc = os.path.join(src, "..", file)
-                os.makedirs(os.path.dirname(fdst), exist_ok=True)
-                shutil.copy2(fsrc, fdst)
-            self._action_end("copy", src, dst, level, t1)
+            return
+        exclude = [] if "exclude" not in item else item["exclude"]
+        exclude = [exclude] if not isinstance(exclude, list) else exclude
+        t1 = self._action_begin("Copying", src, level)
+        for file in self._yield_files(src, exclude):
+            fsrc = os.path.abspath(os.path.join(src, "..", file))
+            fdst = os.path.abspath(os.path.join(dst, "..", file))
+            if self._destination_exists("copy", os.path.join(src, file), fdst, level):
+                continue
+            os.makedirs(os.path.dirname(fdst), exist_ok=True)
+            shutil.copy2(fsrc, fdst)
+        self._action_end("copy", src, dst, level, t1)
+            
 
     def compress(self, root, item, dst_root, level):
         """Compresses files or directories into a ZIP archive.
@@ -245,14 +259,15 @@ class Grebakker:
             FileNotFoundError: If the source path does not exist.
         """
         path = item if isinstance(item, str) else item["name"]
-        exclude = [] if isinstance(item, str) or "exclude" not in item else item["exclude"]
-        exclude = [exclude] if isinstance(exclude, str) else exclude
         src = os.path.join(root, path)
         if not os.path.exists(src):
+            self._log.error(f"file/folder '{src}' to compress does not exist")
             raise FileNotFoundError(f"file/folder '{src}' to compress does not exist")
-        dst = self._get_destination("compress", src, dst_root, path, ".zip", level)
-        if dst is None:
+        dst = os.path.join(dst_root, path) + ".zip"
+        if self._destination_exists("compress", src, dst, level):
             return
+        exclude = [] if "exclude" not in item else item["exclude"]
+        exclude = [exclude] if not isinstance(exclude, list) else exclude
         t1 = self._action_begin("Compressing", src, level)
         zipf = zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED, compresslevel=9)
         if os.path.isfile(src):
@@ -266,13 +281,18 @@ class Grebakker:
         zipf.close()
         self._action_end("compress", src, dst, level, t1)
 
-    def backup(self, root, level=0):
-        """Performs a backup
+        
+
+    def run(self, action, root, level=0):
+        """Performs an action
 
         Args:
+            action (str): The action to perform.
             root (str): Root source directory.
             level (int): Reporting level.
         """
+        if action not in ["backup", "restore"]:
+            raise ValueError(f"unkown action '{action}'")
         # init
         if self._verbosity>0:
             print(f"{self._i(level)}Processing '{root}'...")
@@ -283,59 +303,30 @@ class Grebakker:
         dst_path = os.path.join(self._dest, definition["destination"])
         os.makedirs(dst_path, exist_ok=True)
         # copy
-        to_copy = [] if "copy" not in definition else definition["copy"]
-        for path in to_copy:
+        for path in [] if "copy" not in definition else definition["copy"]:
             self.copy(root, path, dst_path, level)
         # compress
-        to_compress = [] if "compress" not in definition else definition["compress"]
-        for path in to_compress:
-            self.compress(root, path, dst_path, level)
+        for path in [] if "compress" not in definition else definition["compress"]:
+            if action=="backup":
+                self.compress(root, path, dst_path, level)
         # subfolders
-        subs = [] if "subfolders" not in definition else definition["subfolders"]
-        for sub in subs:
+        for sub in [] if "subfolders" not in definition else definition["subfolders"]:
             path = sub if type(sub)==str else sub["name"]
             src = os.path.join(root, path)
             if not os.path.exists(src):
+                self._log.error(f"file/folder '{src}' to recurse into does not exist")
                 raise FileNotFoundError(f"file/folder '{src}' to recurse into does not exist")
-            dst = self._get_destination("sub", src, dst_path, path, "", level)
-            if dst is None:
+            dst = os.path.join(dst_path, path)
+            if self._destination_exists("sub", src, dst, level):
                 continue
             self._log.write("sub", src, dst, "0:00:00")
-            self.backup(os.path.join(root, sub), level+1)
+            self.run(action, os.path.join(root, sub), level+1)
         shutil.copy2(os.path.join(root, "grebakker.json"), dst_path)
         if level==0:
             self._log.close()
             if self._log._written!=0:
                 shutil.move(self._log._name, os.path.join(dst_path, self._log._name))
 
-"""
-    def restore(self, root, level=0):
-        # init
-        if self._verbosity>0:
-            print(f"{self._i(level)}Processing {root}...")
-        definition = None
-        with open(os.path.join(root, "grebakker.json"), encoding="utf-8") as fd:
-            definition = json.load(fd)
-        exit()
-        dst_path = os.path.join(self._dest, definition["destination"])
-        os.makedirs(dst_path, exist_ok=True)
-        # copy
-        to_copy = [] if "copy" not in definition else definition["copy"]
-        for path in to_copy:
-            self.copy(root, path, dst_path, level)
-        # compress
-        to_compress = [] if "compress" not in definition else definition["compress"]
-        for path in to_compress:
-            self.compress(root, path, dst_path, level)
-        # subfolders
-        subs = [] if "subs" not in definition else definition["subs"]
-        for sub in subs:
-            self.backup(os.path.join(root, sub), level+1)
-        shutil.copy(os.path.join(root, "grebakker.json"), dst_path)
-        self._log.close()
-        if self._log._written!=0:
-            shutil.move(self._log._name, os.path.join(dst_path, self._log._name))
-"""
 
 
 # --- functions -------------------------------------------------------------
@@ -365,9 +356,9 @@ def main(arguments : List[str] = None) -> int:
     parser = argparse.ArgumentParser(prog='grebakker', parents=[conf_parser],
                                      description="greyrat's backupper for hackers",
                                      epilog='(c) Daniel Krajzewicz 2025')
-    parser.add_argument("action", default="backup")
+    parser.add_argument("action")
     parser.add_argument("destination")
-    parser.add_argument("definition", default="grebakker.json")
+    parser.add_argument("definition")
     parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
     parser.add_argument('--continue', dest="cont", action="store_true", help="Continues a stopped backup.")
     parser.add_argument('--log-name', default="grebakker_log.csv", help="Change logfile name (default: 'grebakker_log.csv').")
@@ -410,12 +401,11 @@ def main(arguments : List[str] = None) -> int:
     t1 = datetime.datetime.now()
     log = Log(args.log_name, args.log_restart, args.log_format, args.log_off)
     grebakker = Grebakker(args.destination, log, verbosity)
-    if args.action=="backup":
-        try:
-            grebakker.backup(args.definition)
-        except FileNotFoundError as e:
-            print(f"grebakker: error: {e}.", file=sys.stderr)
-            ret = 2
+    try:
+        grebakker.run(args.action, args.definition)
+    except FileNotFoundError as e:
+        print(f"grebakker: error: {e}.", file=sys.stderr)
+        ret = 2
     t2 = datetime.datetime.now()
     if verbosity>0 and ret==0:
         print(f"Completed after {(t2-t1)}")

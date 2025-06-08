@@ -169,7 +169,8 @@ Completed after <DUR>
     check_generated(tmp_path, actions, dst, "csv")
     check_def(tmp_path, DEFINITION1)
 
-def test_main_copy_missing_file(capsys, tmp_path):
+
+def test_main_copy_missing_file_default(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
     os.remove(os.path.join(tmp_path, "set2", "something_else.csv"))
     os.chdir(tmp_path) # !!!
@@ -185,11 +186,114 @@ Processing '<DIR>/set2'...
     #check_generated(tmp_path, actions, dst, "csv")
     #check_def(tmp_path, DEFINITION1A)
 
-def test_main_copy_missing_folder(capsys, tmp_path):
+def test_main_copy_missing_file_none(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
+    os.remove(os.path.join(tmp_path, "set2", "something_else.csv"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-off"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/something_else.csv' to copy does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION1A)
+
+def test_main_copy_missing_file_csv(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
+    os.remove(os.path.join(tmp_path, "set2", "something_else.csv"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "csv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/something_else.csv' to copy does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION1A)
+
+def test_main_copy_missing_file_json(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
+    os.remove(os.path.join(tmp_path, "set2", "something_else.csv"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "json"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/something_else.csv' to copy does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION1A)
+
+
+def test_main_copy_missing_folder_default(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
     shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
     os.chdir(tmp_path) # !!!
     ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to copy does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+ Copying '<DIR>/set2/something_else.csv'... done. (<DUR>)
+ Copying '<DIR>/set2/subfolder1'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION1A)
+
+def test_main_copy_missing_folder_none(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-off"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to copy does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+ Copying '<DIR>/set2/something_else.csv'... done. (<DUR>)
+ Copying '<DIR>/set2/subfolder1'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION1A)
+
+def test_main_copy_missing_folder_csv(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "csv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to copy does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+ Copying '<DIR>/set2/something_else.csv'... done. (<DUR>)
+ Copying '<DIR>/set2/subfolder1'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION1A)
+
+def test_main_copy_missing_folder_json(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION1, "set2", tmp_path)
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "json"])
     assert ret==2
     captured = capsys.readouterr()
     assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to copy does not exist.
@@ -221,7 +325,7 @@ Completed after <DUR>
     check_generated(tmp_path, actions, dst, "csv")
     check_def(tmp_path, DEFINITION2)
 
-def test_main_compress_missing_file(capsys, tmp_path):
+def test_main_compress_missing_file_default(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
     os.remove(os.path.join(tmp_path, "set2", "document.txt"))
     os.chdir(tmp_path) # !!!
@@ -236,11 +340,108 @@ Processing '<DIR>/set2'...
     #check_generated(tmp_path, actions, dst, "csv")
     #check_def(tmp_path, DEFINITION2)
 
-def test_main_compress_missing_folder(capsys, tmp_path):
+def test_main_compress_missing_file_none(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
+    os.remove(os.path.join(tmp_path, "set2", "document.txt"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-off"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/document.txt' to compress does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION2)
+
+def test_main_compress_missing_file_csv(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
+    os.remove(os.path.join(tmp_path, "set2", "document.txt"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "csv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/document.txt' to compress does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION2)
+
+def test_main_compress_missing_file_json(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
+    os.remove(os.path.join(tmp_path, "set2", "document.txt"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "json"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/document.txt' to compress does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION2)
+
+
+def test_main_compress_missing_folder_default(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
     shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
     os.chdir(tmp_path) # !!!
     ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to compress does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Compressing '<DIR>/set2/document.txt'... done. (<DUR>)
+ Compressing '<DIR>/set2/subfolder1'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION2)
+
+def test_main_compress_missing_folder_none(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-off"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to compress does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Compressing '<DIR>/set2/document.txt'... done. (<DUR>)
+ Compressing '<DIR>/set2/subfolder1'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION2)
+
+def test_main_compress_missing_folder_csv(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "csv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to compress does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Compressing '<DIR>/set2/document.txt'... done. (<DUR>)
+ Compressing '<DIR>/set2/subfolder1'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION2)
+
+def test_main_compress_missing_folder_json(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder2"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-vv", "--log-format", "json"])
     assert ret==2
     captured = capsys.readouterr()
     assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder2' to compress does not exist.
@@ -274,11 +475,66 @@ Completed after <DUR>
     check_generated(tmp_path, actions, dst, "csv")
     check_def(tmp_path, DEFINITION3A)
     
-def test_main_subs_missing_sub(capsys, tmp_path):
+    
+def test_main_subs_missing_sub_default(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION3A, "set2", tmp_path, add_defs={"subfolder1": DEFINITION3B})
     shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder1"), ignore_errors=True)
     os.chdir(tmp_path) # !!!
     ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-v", "-v"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder1' to recurse into does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+ Copying '<DIR>/set2/something_else.csv'... done. (<DUR>)
+ Compressing '<DIR>/set2/subfolder2'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION3A)
+    
+def test_main_subs_missing_sub_none(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION3A, "set2", tmp_path, add_defs={"subfolder1": DEFINITION3B})
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder1"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-v", "-v", "--log-off"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder1' to recurse into does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+ Copying '<DIR>/set2/something_else.csv'... done. (<DUR>)
+ Compressing '<DIR>/set2/subfolder2'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION3A)
+    
+def test_main_subs_missing_sub_csv(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION3A, "set2", tmp_path, add_defs={"subfolder1": DEFINITION3B})
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder1"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-v", "-v", "--log-format", "csv"])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder1' to recurse into does not exist.
+"""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Copying '<DIR>/set2/document.txt'... done. (<DUR>)
+ Copying '<DIR>/set2/something_else.csv'... done. (<DUR>)
+ Compressing '<DIR>/set2/subfolder2'... done. (<DUR>)
+"""
+    #check_generated(tmp_path, actions, dst, "csv")
+    #check_def(tmp_path, DEFINITION3A)
+    
+def test_main_subs_missing_sub_json(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION3A, "set2", tmp_path, add_defs={"subfolder1": DEFINITION3B})
+    shutil.rmtree(os.path.join(tmp_path, "set2", "subfolder1"), ignore_errors=True)
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-v", "-v", "--log-format", "json"])
     assert ret==2
     captured = capsys.readouterr()
     assert pdirtime(captured.err, tmp_path) == """grebakker: error: file/folder '<DIR>/set2/subfolder1' to recurse into does not exist.
