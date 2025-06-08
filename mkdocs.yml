@@ -28,11 +28,12 @@ nav:
     - Command Line: cmd.md
     - Links: links.md
     - Glossary: glossary.md
-    - FAQ: faq.md
+    - API: api_grebakker.md
     - ChangeLog: changes.md
     - License (GPL): license.md
-    - API: api_grebakker.md
     - Legal: legal.md
+
+exclude_docs:
 
 markdown_extensions:
     - admonition
