@@ -1,4 +1,4 @@
-# grebakker Information
+# Legal Information
 
 ## Impressum
 
@@ -16,6 +16,7 @@ These pages were made by Daniel Krajzewicz, 2025.
 
 ## Regards
 
-**grebakker** uses [mkdocs](https://www.mkdocs.org/) together with the [material extension](https://squidfunk.github.io/mkdocs-material/).
+**grebakker** uses [pytest](https://pytest.org) and [mkdocs](https://www.mkdocs.org/) together with the [material extension](https://squidfunk.github.io/mkdocs-material/). I like mkdocs very much. The docs can be read online at [readthedocs](https://grebakker.readthedocs.io/en/latest/). Thank you!
 
+**grebakker** is validated using Python's pytest and coverage libraries and the coverage is tracked on coveralls. Thank you!
 
