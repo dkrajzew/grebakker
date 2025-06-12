@@ -48,7 +48,7 @@ __grebakker__ writes a log file that lists what has been done. Per default, the 
 
 __grebakker__ will complain if a log file with the defined / default name already exists and neither the option **--log-restart** nor the option **--continue** is set, assuming that a prior backup has failed. You should check the existing log file for errors in such cases. If the option **--continue** is set, __grebakker__ will skip backups already existing in the target folder and append the performed actions to an optionally existing log file.
 
-The option **--verbose** (or **-v** for short) increaes the verbosity level. Currently, the highest verbosity level is 2.
+The option **--verbose** (or **-v** for short) increases the verbosity level. Currently, the highest verbosity level is 2.
 
 When **--help** (or **-h**) is set, the help screen will be printed and __grebakker__ will exit afterwards.
 

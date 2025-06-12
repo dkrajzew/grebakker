@@ -12,11 +12,9 @@ __grebakker__ - a backup solution for hackers (just for the acronym :-) )
 
 ## Introduction
 
-__grebakker__ is a script that backups files and folders into a defined folder.
+__grebakker__ is a script that backups files and folders into a defined folder. __grebakker__ uses json to define what should be backupped and how - copied or compressed. The json files can reference each other. __grebakker__ does not need any external applications, libraries, or modules besides plain Python.
 
-__grebakker__ uses json to define what should be backupped and how - copied or compressed. The json files can reference each other.
-
-__grebakker__ does not need any external applications, libraries, or modules besides plain Python.
+__grebakker__ is in a very early development stage. I use it successfully, but there are different things that should be streamlined. **I would be glad to get any feedback on this.**
 
 
 ## Usage
@@ -49,11 +47,11 @@ That's all... Your files and folders are backupped to the subfolder ```d/``` of 
 
 ## Documentation
 
-__grebakker__ is meant to be run on the command line. The documentation consists of a [user manual](usage.md) and a [man-page like call documentation](cmd.md). The [glossary](glossary.md) may be of help, as well as answers to [frequently asked questions](faq.md).
+__grebakker__ is meant to be run on the command line. The documentation consists of a [user manual](usage.md) and a [man-page like call documentation](cmd.md). The [glossary](glossary.md) may be of help.
 
-If you want to contribute, you may check the [API documentation](api.md) or visit [grebakker on github](https://github.com/dkrajzew/grebakker) where besides the code you may find the [grebakker issue tracker](https://github.com/dkrajzew/grebakker/issues) or a [discussions about grebakker](https://github.com/dkrajzew/grebakker/discussions) sections.
+If you want to contribute, you may check the [API documentation](api_grebakker.md) or visit [grebakker on github](https://github.com/dkrajzew/grebakker) where besides the code you may find the [grebakker issue tracker](https://github.com/dkrajzew/grebakker/issues) or [discussions about grebakker](https://github.com/dkrajzew/grebakker/discussions) sections.
 
-Additional documentation includes a page with relevant [links](links.md), the [ChangeLog](changes.md), as well as the [license](license.md). __grebakker__ is licensed under the [GPL license](license.md).
+Additional documentation includes a page with relevant [links](links.md), the [ChangeLog](changes.md), as well as the [license](license.md) ([GPL](license.md)).
 
 
 ## Background
