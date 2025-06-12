@@ -281,6 +281,31 @@ class Grebakker:
         zipf.close()
         self._action_end("compress", src, dst, level, t1)
 
+
+    def decompress(self, root, item, dst_root, level):
+        """Compresses files or directories into a ZIP archive.
+
+        Args:
+            root (str): Root source directory.
+            item (str or Dict[str, str]): Item to compress. If dict, may contain 'name' and 'exclude'.
+            dst_root (str): Root destination directory.
+            level (int): Reporting level.
+
+        Raises:
+            FileNotFoundError: If the source path does not exist.
+        """
+        path = item if isinstance(item, str) else item["name"]
+        src = os.path.join(root, path) + ".zip"
+        if not os.path.exists(src):
+            self._log.error(f"file/folder '{src}' to decompress does not exist")
+            raise FileNotFoundError(f"file/folder '{src}' to decompress does not exist")
+        dst = dst_root#os.path.join(dst_root, path)
+        #if self._destination_exists("decompress", src, dst, level):
+        #    return
+        t1 = self._action_begin("Decompressing", src, level)
+        with zipfile.ZipFile(src, 'r') as zip_ref:
+            zip_ref.extractall(dst)
+        self._action_end("decompress", src, dst, level, t1)
         
 
     def run(self, action, root, level=0):
@@ -309,6 +334,8 @@ class Grebakker:
         for path in [] if "compress" not in definition else definition["compress"]:
             if action=="backup":
                 self.compress(root, path, dst_path, level)
+            elif action=="restore":
+                self.decompress(root, path, dst_path, level)
         # subfolders
         for sub in [] if "subfolders" not in definition else definition["subfolders"]:
             path = sub if type(sub)==str else sub["name"]
@@ -377,7 +404,7 @@ def main(arguments : List[str] = None) -> int:
     verbosity = int(args.verbose)
     # check
     errors = []
-    if args.action not in ["backup"]:
+    if args.action not in ["backup", "restore"]:
         errors.append(f"unkown action '{args.action}'")
     if len(errors)!=0:
         for e in errors:
