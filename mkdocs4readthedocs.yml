@@ -21,8 +21,10 @@ nav:
     - Links: links.md
     - ChangeLog: changes.md
     - License (GPL): license.md
+    - Glossary: glossary.md
     - API: api_grebakker.md
     - Legal: legal.md
+
 
 markdown_extensions:
     - admonition
