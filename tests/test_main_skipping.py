@@ -47,33 +47,21 @@ DEFINITION2 = """{
 }
 """
 
+DEFINITION3A = """{
+    "destination": "d/",
+    "subfolders": [ "subfolder1" ]
+}
+"""
+DEFINITION3B = """{
+    "destination": "d/subfolder1",
+    "compress": [ 
+        { "name": "subfolder11" },
+        { "name": "subfolder12" }
+    ]
+}
+"""
 
 # --- test functions ----------------------------------------------------------
-def test_main_skip_clean_v0(capsys, tmp_path):
-    actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path)
-    os.chdir(tmp_path) # !!!
-    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set1")])
-    assert ret==0
-    captured = capsys.readouterr()
-    assert pname(captured.err) == ""
-    assert pname(captured.out) == ""
-    check_generated(tmp_path, actions, dst, "csv")
-    check_def(tmp_path, DEFINITION1)
-
-def test_main_skip_clean_v1(capsys, tmp_path):
-    actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path)
-    os.chdir(tmp_path) # !!!
-    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set1"), "-v"])
-    assert ret==0
-    captured = capsys.readouterr()
-    assert pname(captured.err) == ""
-    assert pdirtime(captured.out, tmp_path) == """Starting...
-Processing '<DIR>/set1'...
-Completed after <DUR>
-"""
-    check_generated(tmp_path, actions, dst, "csv")
-    check_def(tmp_path, DEFINITION1)
-
 def test_main_skip_clean_v2(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path)
     os.chdir(tmp_path) # !!!
@@ -92,36 +80,7 @@ Completed after <DUR>
     check_def(tmp_path, DEFINITION1)
 
 
-def test_main_skip_doc1_exists__plain_v0(capsys, tmp_path):
-    actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path, skipped=["document1.txt"])
-    os.makedirs(os.path.join(dst, "d"))
-    shutil.copy(tmp_path / "set1" / "document1.txt", os.path.join(dstroot, "d", "document1.txt"))
-    os.chdir(tmp_path) # !!!
-    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set1")])
-    assert ret==0
-    captured = capsys.readouterr()
-    assert pname(captured.err) == ""
-    assert pname(captured.out) == ""
-    check_generated(tmp_path, actions, dst, "csv")
-    check_def(tmp_path, DEFINITION1)
-
-def test_main_skip_doc1_exists__plain_v1(capsys, tmp_path):
-    actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path, skipped=["document1.txt"])
-    os.makedirs(os.path.join(dst, "d"))
-    shutil.copy(tmp_path / "set1" / "document1.txt", os.path.join(dstroot, "d", "document1.txt"))
-    os.chdir(tmp_path) # !!!
-    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set1"), "-v"])
-    assert ret==0
-    captured = capsys.readouterr()
-    assert pname(captured.err) == ""
-    assert pdirtime(captured.out, tmp_path) == """Starting...
-Processing '<DIR>/set1'...
-Completed after <DUR>
-"""
-    check_generated(tmp_path, actions, dst, "csv")
-    check_def(tmp_path, DEFINITION1)
-
-def test_main_skip_doc1_exists__plain_v2(capsys, tmp_path):
+def test_main_skip_doc1_exists_v2(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path, skipped=["document1.txt"])
     os.makedirs(os.path.join(dst, "d"))
     shutil.copy(tmp_path / "set1" / "document1.txt", os.path.join(dstroot, "d", "document1.txt"))
@@ -141,36 +100,7 @@ Completed after <DUR>
     check_def(tmp_path, DEFINITION1)
 
 
-def test_main_skip_archive1_exists__plain_v0(capsys, tmp_path):
-    actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path, skipped=["subfolder"])
-    os.makedirs(os.path.join(dstroot, "d"))
-    shutil.copy(os.path.join(TEST_PATH, "subfolder.zip"), os.path.join(dstroot, "d", "subfolder.zip"))
-    os.chdir(tmp_path) # !!!
-    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set1")])
-    assert ret==0
-    captured = capsys.readouterr()
-    assert pname(captured.err) == ""
-    assert pname(captured.out) == ""
-    check_generated(tmp_path, actions, dst, "csv")
-    check_def(tmp_path, DEFINITION1)
-
-def test_main_skip_archive1_exists__plain_v1(capsys, tmp_path):
-    actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path, skipped=["subfolder"])
-    os.makedirs(os.path.join(dstroot, "d"))
-    shutil.copy(os.path.join(TEST_PATH, "subfolder.zip"), os.path.join(dstroot, "d", "subfolder.zip"))
-    os.chdir(tmp_path) # !!!
-    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set1"), "-v"])
-    assert ret==0
-    captured = capsys.readouterr()
-    assert pname(captured.err) == ""
-    assert pdirtime(captured.out, tmp_path) == """Starting...
-Processing '<DIR>/set1'...
-Completed after <DUR>
-"""
-    check_generated(tmp_path, actions, dst, "csv")
-    check_def(tmp_path, DEFINITION1)
-
-def test_main_skip_archive1_exists__plain_v2(capsys, tmp_path):
+def test_main_skip_archive1_exists_v2(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION1, "set1", tmp_path, skipped=["subfolder"])
     os.makedirs(os.path.join(dstroot, "d"))
     shutil.copy(os.path.join(TEST_PATH, "subfolder.zip"), os.path.join(dstroot, "d", "subfolder.zip"))
@@ -190,7 +120,7 @@ Completed after <DUR>
     check_def(tmp_path, DEFINITION1)
 
 
-def test_main_skip_subfile_exists__plain_v2(capsys, tmp_path):
+def test_main_skip_folderfile_exists__plain_v2(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path)#, skipped=["subfolder"])
     os.makedirs(os.path.join(dstroot, "d"))
     #shutil.copy(os.path.join(TEST_PATH, "subfolder.zip"), os.path.join(dstroot, "d", "subfolder.zip"))
@@ -208,7 +138,7 @@ Completed after <DUR>
     check_def(tmp_path, DEFINITION2)
 
 
-def test_main_skip_subfile_exists__exists_v2(capsys, tmp_path):
+def test_main_skip_folderfile_exists__exists_v2(capsys, tmp_path):
     actions, dstroot, dst = prepare(DEFINITION2, "set2", tmp_path, skipped=["document2.txt"])
     #shutil.copy(os.path.join(TEST_PATH, "subfolder.zip"), os.path.join(dstroot, "d", "subfolder.zip"))
     os.makedirs(os.path.join(dstroot, "d", "subfolder2"))
@@ -227,4 +157,42 @@ Completed after <DUR>
 """
     check_generated(tmp_path, actions, dst, "csv", log_head='"copy";"<DIR>/set2/subfolder2/subfolder2/document2.txt";"<DIR>/backup/d/subfolder2/document2.txt";"skipped"\n')
     check_def(tmp_path, DEFINITION2)
-    
+
+
+def test_main_skip_subfolder_exists__plain_v2(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION3A, "set2", tmp_path, add_defs={"subfolder1": DEFINITION3B})
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-v", "-v"])
+    assert ret==0
+    captured = capsys.readouterr()
+    assert pname(captured.err) == ""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Processing '<DIR>/set2/subfolder1'...
+  Compressing '<DIR>/set2/subfolder1/subfolder11'... done. (<DUR>)
+  Compressing '<DIR>/set2/subfolder1/subfolder12'... done. (<DUR>)
+Completed after <DUR>
+"""
+    check_generated(tmp_path, actions, dst, "csv")
+    check_def(tmp_path, DEFINITION3A)
+    #check_def(tmp_path / "subfolder1", DEFINITION3B)
+
+
+def test_main_skip_subfolder_exists__exists_v2(capsys, tmp_path):
+    actions, dstroot, dst = prepare(DEFINITION3A, "set2", tmp_path, add_defs={"subfolder1": DEFINITION3B})
+    os.makedirs(os.path.join(dstroot, "d", "subfolder1"))
+    os.chdir(tmp_path) # !!!
+    ret = grebakker.main(["backup", dstroot, str(tmp_path / "set2"), "-v", "-v"])
+    assert ret==0
+    captured = capsys.readouterr()
+    assert pname(captured.err) == ""
+    assert pdirtime(captured.out, tmp_path) == """Starting...
+Processing '<DIR>/set2'...
+ Processing '<DIR>/set2/subfolder1'...
+  Compressing '<DIR>/set2/subfolder1/subfolder11'... done. (<DUR>)
+  Compressing '<DIR>/set2/subfolder1/subfolder12'... done. (<DUR>)
+Completed after <DUR>
+"""
+    check_generated(tmp_path, actions, dst, "csv")
+    check_def(tmp_path, DEFINITION3A)
+    #check_def(tmp_path / "subfolder1", DEFINITION3B)

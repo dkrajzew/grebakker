@@ -48,7 +48,6 @@ DEFINITION1B = """{
 }
 """
 
-
 DEFINITION2A = """{
     "destination": "d/",
     "copy": [ 

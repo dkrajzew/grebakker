@@ -35,11 +35,8 @@ def pname(string, path="<DIR>"):
     return string.replace("__main__.py", "grebakker").replace("pytest", "grebakker").replace("optional arguments", "options")
 
 
-def tread(filepath, patch_date=False):
-    c1 = filepath.read_text()
-    #if patch_date:
-    #    c1 = pdate(c1)
-    return c1
+def tread(filepath):
+    return filepath.read_text()
 
 def bread(filepath):
     return filepath.read_bytes()
@@ -98,8 +95,7 @@ def are_equivalent(filename1, filename2):
         
         # Do some simple checks first
         # Do the ZipFiles contain the same the files?
-        if zipinfo1.keys() != zipinfo2.keys():
-            return False # pragma: no cover
+        assert zipinfo1.keys() == zipinfo2.keys()
         
         # Do the files in the archives have the same CRCs? (This is a 32-bit CRC of the
         # uncompressed item. Is that good enough to confirm the files are the same?)
