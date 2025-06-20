@@ -38,35 +38,58 @@ You will find the following information in it:
 * the (optional) attribute ```compress``` lists files and folders that shall be compressed; the generated archive is stored in the destination folder
 * the (optional) attribute ```subfolders``` lists (sub)folders that shall be processed; in each of these folder, a new ```grebakker.json``` file must be given
 
-So, when being started, __grebakker__ reads the ```grebakker.json``` file and copies all files / folders listed in the ```copy``` attribute, compresses all those listed in the ```compress``` attribute, and runs iteratively over all folders given in the ```subfolders``` attribute.
+The synopsis of grebakker is briefly
+
+```cmd
+python src\grebakker.py <ACTION> <DESTINATION> <SOURCE>
+```
+
+So given the file above, you may start __grebakker__ like this:
+
+```cmd
+python src\grebakker.py backup f:\backup\2025_05 d:\
+```
+
+
+Then, __grebakker__ reads the ```d:\grebakker.json``` file and copies all files / folders listed in the ```copy``` attribute, compresses all those listed in the ```compress``` attribute, and runs iteratively over all folders given in the ```subfolders``` attribute.
 
 
 ## Definition files
 
-Take the example from above. For each project you want to backup, set up a file that describes how it shall be backupped.
+Take the example from above. For each project you want to backup, set up a file that describes how it shall be backupped - which files / folders shall be copied, which compressed and into which folders __grebakker__ shall dive into.
 
 
 ## Logging
 
-__grebakker__ log performed actions - either using the csv or the json format.
+__grebakker__ logs performed actions - either using the csv or the json format.
 
 A csv file lists each action in a line, consisting of ***&lt;ACTION&gt;***;***&lt;SOURCE&gt;***;***&lt;DESTINATION&gt;***;***&lt;DURATION&gt;***. So a csv log file could look like this:
 
 ```csv
-copy;!!!;!!!;!!!
-compress;!!!;!!!;!!!
+"copy";"document.pdf";"d/document.pdf";"0:00:01.11"
+"copy";"old_backups";"d/old_backups";"0:01:02.2"
+"compress";"repository";"d/repository.zip";"0:03:02.34545"
+"compress";"current";"d/current.zip";"0:01:02.43242"
+"sub";"attic";"d/attic";"0:00:00"
+"compress";"attic/subfolder11";"d/attic/subfolder11.zip";"0:01:01.2398"
+"compress";"attic/subfolder12";"d/attic/subfolder12.zip";"0:02:01.2342"
 ```
 
 The json output stores the same information like '{ "action": "***&lt;ACTION&gt;***", "source": "***&lt;SOURCE&gt;***", "destination": "***&lt;DESTINATION&gt;***", "duration": "***&lt;DURATION&gt;***" }'.
 
 ```js
 [
-    { "action": "copy", "source": "!!!", "destination": "!!!", "duration": "!!!" },
-    { "action": "compress", "source": "!!!", "destination": "!!!", "duration": "!!!" },
+    { "action": "copy", "source": "document.pdf", "destination": "d/document.pdf", "duration": "0:00:0111" },
+    { "action": "copy", "source": "old_backups", "destination": "d/old_backups", "duration": "0:01:02.2" },
+    { "action": "compress", "source": "repository", "destination": "d/repository.zip", "duration": "0:03:02.34545" },
+    { "action": "compress", "source": "current", "destination": "d/current.zip", "duration": "0:01:02.43242" },
+    { "action": "sub", "source": "attic", "destination": "d/attic", "duration": "0:00:00" },
+    { "action": "compress", "source": "attic/subfolder11", "destination": "d/attic/subfolder11.zip", "duration": "0:01:01.2398" },
+    { "action": "compress", "source": "attic/subfolder11", "destination": "d/attic/subfolder12.zip", "duration": "0:02:01.2342" }
 ]
 ```
 
-The log serves two tasks. First, to replicate what has been done after backupping. Second, to continue if the backup process has been interrupted.
+The log shall report what has been done. It may serve further purposes in the future.
 
 
 ## Safety
@@ -89,7 +112,7 @@ Yes, well, basically, you have to define a backup definition file for all the pr
 
 Yes, there are.
 
-Currently, __grebakker__ does not report correctly, when a folder was not copied or compressed completely. This must be changed in next versions.
+Currently, __grebakker__ does not report correctly when a folder was not copied or compressed completely. This must be changed in next versions.
 
-As well, the tests - though covering 100% of the code - do not cover the compression of files well. This should be changed in the next steps as well.
+As well, the tests - though covering almost 100% of the code - do not cover the compression of files well. This should be changed in the next steps as well.
 
