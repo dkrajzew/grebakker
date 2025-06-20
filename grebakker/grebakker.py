@@ -344,8 +344,9 @@ class Grebakker:
                 self._log.error(f"file/folder '{src}' to recurse into does not exist")
                 raise FileNotFoundError(f"file/folder '{src}' to recurse into does not exist")
             dst = os.path.join(dst_path, path)
-            if self._destination_exists("sub", src, dst, level):
-                continue
+            # !!! add an option for what to do
+            #if self._destination_exists("sub", src, dst, level):
+            #    pass
             self._log.write("sub", src, dst, "0:00:00")
             self.run(action, os.path.join(root, sub), level+1)
         shutil.copy2(os.path.join(root, "grebakker.json"), dst_path)
@@ -383,9 +384,9 @@ def main(arguments : List[str] = None) -> int:
     parser = argparse.ArgumentParser(prog='grebakker', parents=[conf_parser],
                                      description="greyrat's backupper for hackers",
                                      epilog='(c) Daniel Krajzewicz 2025')
-    parser.add_argument("action")
-    parser.add_argument("destination")
-    parser.add_argument("definition")
+    parser.add_argument("action" if "action" not in defaults else "--action")
+    parser.add_argument("destination" if "destination" not in defaults else "--destination")
+    parser.add_argument("definition" if "definition" not in defaults else "--definition")
     parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
     parser.add_argument('--continue', dest="cont", action="store_true", help="Continues a stopped backup.")
     parser.add_argument('--log-name', default="grebakker_log.csv", help="Change logfile name (default: 'grebakker_log.csv').")
