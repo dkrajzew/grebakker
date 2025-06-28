@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""grebakker - greyrat's backupper for hackers
-"""
+"""grebakker - greyrat's backupper for hackers."""
 # ===========================================================================
 __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2025, Daniel Krajzewicz"
@@ -39,13 +38,13 @@ class Log:
     """Handles logging of performed actions in CSV or JSON format."""
 
     def __init__(self, name: str, restart: bool, log_format: str, off: bool) -> None:
-        """Initializes the Log object.
+        """Initialize the Log object.
 
         Args:
-            name (str): Path to the log file.
-            restart (bool): If True, overwrites the existing log file.
-            log_format (str): Format of the log ('csv' or 'json').
-            off (bool): If True, disables logging.
+            name (str): Path to the log file
+            restart (bool): If True, overwrites the existing log file
+            log_format (str): Format of the log ('csv' or 'json')
+            off (bool): If True, disables logging
         """
         self._format = log_format
         self._written = 0
@@ -58,13 +57,13 @@ class Log:
             self._output.write(f'[\n')
 
     def write(self, act: str, src: str, dst: str, duration: str) -> None:
-        """Writes a log entry about a performed action.
+        """Write a log entry about a performed action.
 
         Args:
-            act (str): Action performed.
-            src (str): Source path.
-            dst (str): Destination path.
-            duration (str): Duration of the action.
+            act (str): Action performed
+            src (str): Source path
+            dst (str): Destination path
+            duration (str): Duration of the action
         """
         if self._output is None:
             return
@@ -78,10 +77,10 @@ class Log:
         self._written += 1
         
     def error(self, error: str) -> None:
-        """Writes a log entry about an error.
+        """Write a log entry about an error.
 
         Args:
-            error (str): The error occured.
+            error (str): The error occured
         """
         if self._output is None:
             return
@@ -104,15 +103,15 @@ class Log:
         
 
 class Grebakker:
-    """Performs backup operations."""
+    """Perform backup operations."""
 
     def __init__(self, dest: str, log: Log, verbosity: int):
-        """Initializes the Grebakker object.
+        """Initialize the Grebakker object.
 
         Args:
-            dest (str): Destination directory for backups.
-            log (Log): Log object for recording actions.
-            verbosity (int): Verbosity level for output.
+            dest (str): Destination directory for backups
+            log (Log): Log object for recording actions
+            verbosity (int): Verbosity level for output
         """
         self._dest = dest
         self._log = log
@@ -120,12 +119,12 @@ class Grebakker:
         self._line_ended = True
 
     def _action_begin(self, mml_action: str, path: str, level: int) -> datetime.datetime:
-        """Marks the beginning of an action.
+        """Report the beginning of an action, return starting time.
 
         Args:
-            mml_action (str): Description of the action.
-            path (str): Path involved in the action.
-            level (int): Indentation level.
+            mml_action (str): Description of the action
+            path (str): Path involved in the action
+            level (int): Indentation level
 
         Returns:
             (datetime.datetime): Start time of the action.
@@ -136,14 +135,14 @@ class Grebakker:
         return datetime.datetime.now()
 
     def _action_end(self, action: str, path: str, dst: str, level: int, t1: datetime.datetime) -> None:
-        """Marks the end of an action and logs it.
+        """Report the end of an action and logs it.
 
         Args:
-            action (str): Action performed.
-            path (str): Source path.
-            dst (str): Destination path.
-            level (int): Indentation level.
-            t1 (datetime.datetime): Start time of the action.
+            action (str): Action performed
+            path (str): Source path
+            dst (str): Destination path
+            level (int): Indentation level
+            t1 (datetime.datetime): Start time of the action
         """
         t2 = datetime.datetime.now()
         self._log.write(action, path, dst, str(t2-t1))
@@ -152,14 +151,14 @@ class Grebakker:
             self._line_ended = True
             
     def _yield_files(self, src: str, exclude: List[str]) -> Generator:
-        """Yields files from the source directory, excluding specified patterns.
+        """Yield files from the source directory, excluding specified patterns.
 
         Args:
             src (str): Source directory.
             exclude (List[str]): List of patterns to exclude.
 
         Yields:
-            source_path (str): Relative path to each file.
+            source_path (str): Relative path to each file
         """
         for root, dirs, files in os.walk(src):
             dirs[:] = [d for d in dirs if d not in exclude]
@@ -175,23 +174,24 @@ class Grebakker:
                 yield os.path.relpath(os.path.join(root, file), os.path.join(src, ".."))
     
     def _i(self, level: int) -> str:
-        """Returns indentation spaces for the given output level.
+        """Return indentation spaces for the given output level.
 
         Args:
             level (int): Indentation level.
 
         Returns:
-            (str): Indentation spaces.
+            (str): Indentation spaces
         """
         return ' '*level
 
     def _destination_exists(self, action: str, src: str, dst: str, level: int) -> bool:
-        """Determines the destination path for an action.
+        """Determine the destination path for an action.
 
         Args:
-            action (str): Action being performed.
-            src (str): Source path.
-            level (int): Indentation level.
+            action (str): Action being performed
+            src (str): Source path
+            dst (str): Destination path
+            level (int): Indentation level
 
         Returns:
             (str or None): Destination path or None if the destination file exists.
@@ -208,13 +208,13 @@ class Grebakker:
 
 
     def copy(self, src_root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
-        """Copies files or directories from source to destination.
+        """Copy files or directories from source to destination.
 
         Args:
-            src_root (str): Root source directory.
-            item (str or Dict[str, str]): Item to copy. If dict, may contain 'name' and 'exclude'.
-            dst_root (str): Root destination directory.
-            level (int): Reporting level.
+            src_root (str): Root source directory
+            item (Union[str, Dict[str, str]]): Item to copy. If dict, may contain 'name' and 'exclude'
+            dst_root (str): Root destination directory
+            level (int): Reporting level
 
         Raises:
             FileNotFoundError: If the source path does not exist.
@@ -247,16 +247,16 @@ class Grebakker:
             
 
     def compress(self, root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
-        """Compresses files or directories into a ZIP archive.
+        """Compress files or directories into a ZIP archive.
 
         Args:
-            root (str): Root source directory.
-            item (str or Dict[str, str]): Item to compress. If dict, may contain 'name' and 'exclude'.
-            dst_root (str): Root destination directory.
-            level (int): Reporting level.
+            root (str): Root source directory
+            item (Union[str, Dict[str, str]]): Item to compress. If dict, may contain 'name' and 'exclude'
+            dst_root (str): Root destination directory
+            level (int): Reporting level
 
         Raises:
-            FileNotFoundError: If the source path does not exist.
+            FileNotFoundError: If the source path does not exist
         """
         path = item if isinstance(item, str) else item["name"]
         src = os.path.join(root, path)
@@ -283,16 +283,16 @@ class Grebakker:
 
 
     def decompress(self, root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
-        """Compresses files or directories into a ZIP archive.
+        """Decompress ZIP archives.
 
         Args:
-            root (str): Root source directory.
-            item (str or Dict[str, str]): Item to compress. If dict, may contain 'name' and 'exclude'.
-            dst_root (str): Root destination directory.
-            level (int): Reporting level.
+            root (str): Root source directory
+            item (Union[str, Dict[str, str]]): Item to compress. If dict, may contain 'name' and 'exclude'
+            dst_root (str): Root destination directory
+            level (int): Reporting level
 
         Raises:
-            FileNotFoundError: If the source path does not exist.
+            FileNotFoundError: If the source path does not exist
         """
         path = item if isinstance(item, str) else item["name"]
         src = os.path.join(root, path) + ".zip"
@@ -309,12 +309,12 @@ class Grebakker:
         
 
     def run(self, action: str, root: str, level: int=0) -> None:
-        """Performs an action
+        """Perform an action.
 
         Args:
-            action (str): The action to perform.
-            root (str): Root source directory.
-            level (int): Reporting level.
+            action (str): The action to perform
+            root (str): Root source directory
+            level (int): Reporting level
         """
         if action not in ["backup", "restore"]:
             raise ValueError(f"unkown action '{action}'")
@@ -359,14 +359,13 @@ class Grebakker:
 
 # --- functions -------------------------------------------------------------
 def main(arguments: List[str] = []) -> int:
-    """
-    The main method using parameters from the command line.
+    """Run grebaker using the given parameters.
 
     Args:
-        arguments (List[str]): A list of command line arguments.
+        arguments (List[str]): A list of command line arguments
 
     Returns:
-        (int): The exit code (0 for success).
+        (int): The exit code (0 for success)
     """
     # parse options
     # https://stackoverflow.com/questions/3609852/which-is-the-best-way-to-allow-configuration-options-be-overridden-at-the-comman
