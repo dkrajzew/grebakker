@@ -38,7 +38,7 @@ from typing import Any
 class Log:
     """Handles logging of performed actions in CSV or JSON format."""
 
-    def __init__(self, name, restart, log_format, off):
+    def __init__(self, name: str, restart: bool, log_format: str, off: bool) -> None:
         """Initializes the Log object.
 
         Args:
@@ -57,7 +57,7 @@ class Log:
         if self._format=="json":
             self._output.write(f'[\n')
 
-    def write(self, act, src, dst, duration):
+    def write(self, act: str, src: str, dst: str, duration: str) -> None:
         """Writes a log entry about a performed action.
 
         Args:
@@ -77,7 +77,7 @@ class Log:
         self._output.flush()
         self._written += 1
         
-    def error(self, error):
+    def error(self, error: str) -> None:
         """Writes a log entry about an error.
 
         Args:
@@ -94,7 +94,7 @@ class Log:
         self._output.flush()
         self._written += 1
         
-    def close(self):
+    def close(self) -> None:
         """Closes the log file."""
         if self._output is None:
             return
@@ -106,7 +106,7 @@ class Log:
 class Grebakker:
     """Performs backup operations."""
 
-    def __init__(self, dest, log, verbosity):
+    def __init__(self, dest: str, log: Log, verbosity: int):
         """Initializes the Grebakker object.
 
         Args:
@@ -119,7 +119,7 @@ class Grebakker:
         self._verbosity = verbosity
         self._line_ended = True
 
-    def _action_begin(self, mml_action, path, level):
+    def _action_begin(self, mml_action: str, path: str, level: int) -> datetime.datetime:
         """Marks the beginning of an action.
 
         Args:
@@ -135,7 +135,7 @@ class Grebakker:
             self._line_ended = False
         return datetime.datetime.now()
 
-    def _action_end(self, action, path, dst, level, t1):
+    def _action_end(self, action: str, path: str, dst: str, level: int, t1: datetime.datetime) -> None:
         """Marks the end of an action and logs it.
 
         Args:
@@ -151,7 +151,7 @@ class Grebakker:
             print(f"done. ({t2-t1})")
             self._line_ended = True
             
-    def _yield_files(self, src, exclude):
+    def _yield_files(self, src: str, exclude: List[str]) -> Generator:
         """Yields files from the source directory, excluding specified patterns.
 
         Args:
@@ -174,7 +174,7 @@ class Grebakker:
                     continue
                 yield os.path.relpath(os.path.join(root, file), os.path.join(src, ".."))
     
-    def _i(self, level):
+    def _i(self, level: int) -> str:
         """Returns indentation spaces for the given output level.
 
         Args:
@@ -185,7 +185,7 @@ class Grebakker:
         """
         return ' '*level
 
-    def _destination_exists(self, action, src, dst, level):
+    def _destination_exists(self, action: str, src: str, dst: str, level: int) -> bool:
         """Determines the destination path for an action.
 
         Args:
@@ -207,7 +207,7 @@ class Grebakker:
         return True
 
 
-    def copy(self, src_root, item, dst_root, level):
+    def copy(self, src_root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
         """Copies files or directories from source to destination.
 
         Args:
@@ -246,7 +246,7 @@ class Grebakker:
         self._action_end("copy", src, dst, level, t1)
             
 
-    def compress(self, root, item, dst_root, level):
+    def compress(self, root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
         """Compresses files or directories into a ZIP archive.
 
         Args:
@@ -282,7 +282,7 @@ class Grebakker:
         self._action_end("compress", src, dst, level, t1)
 
 
-    def decompress(self, root, item, dst_root, level):
+    def decompress(self, root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
         """Compresses files or directories into a ZIP archive.
 
         Args:
@@ -308,7 +308,7 @@ class Grebakker:
         self._action_end("decompress", src, dst, level, t1)
         
 
-    def run(self, action, root, level=0):
+    def run(self, action: str, root: str, level: int=0) -> None:
         """Performs an action
 
         Args:
@@ -358,7 +358,7 @@ class Grebakker:
 
 
 # --- functions -------------------------------------------------------------
-def main(arguments : List[str] = None) -> int:
+def main(arguments: List[str] = []) -> int:
     """
     The main method using parameters from the command line.
 
