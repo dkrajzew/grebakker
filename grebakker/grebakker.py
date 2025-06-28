@@ -72,7 +72,7 @@ class Log:
             self._output.write('    {"action": "' + act + '", "src": "' + src + '", "dst": "' + dst + '", "duration": "' + duration + '"}')
         self._output.flush()
         self._written += 1
-        
+
     def error(self, error: str) -> None:
         """Write a log entry about an error.
 
@@ -89,7 +89,7 @@ class Log:
             self._output.write('    {"error": "' + error + '"}')
         self._output.flush()
         self._written += 1
-        
+
     def close(self) -> None:
         """Closes the log file."""
         if self._output is None:
@@ -97,7 +97,7 @@ class Log:
         if self._format=="json":
             self._output.write('\n]\n')
         self._output.close()
-        
+
 
 class Grebakker:
     """Perform backup operations."""
@@ -146,7 +146,7 @@ class Grebakker:
         if self._verbosity>1:
             print(f"done. ({t2-t1})")
             self._line_ended = True
-            
+
     def _yield_files(self, src: str, exclude: List[str]) -> Generator:
         """Yield files from the source directory, excluding specified patterns.
 
@@ -169,7 +169,7 @@ class Grebakker:
                 if not use:
                     continue
                 yield os.path.relpath(os.path.join(root, file), os.path.join(src, ".."))
-    
+
     def _i(self, level: int) -> str:
         """Return indentation spaces for the given output level.
 
@@ -241,7 +241,7 @@ class Grebakker:
             os.makedirs(os.path.dirname(fdst), exist_ok=True)
             shutil.copy2(fsrc, fdst)
         self._action_end("copy", src, dst, level, t1)
-            
+
 
     def compress(self, root: str, item: Union[str, Dict[str, str]], dst_root: str, level: int) -> None:
         """Compress files or directories into a ZIP archive.
@@ -303,7 +303,7 @@ class Grebakker:
         with zipfile.ZipFile(src, 'r') as zip_ref:
             zip_ref.extractall(dst)
         self._action_end("decompress", src, dst, level, t1)
-        
+
 
     def run(self, action: str, root: str, level: int=0) -> None:
         """Perform an action.
@@ -436,10 +436,7 @@ def main(arguments: List[str] = []) -> int:
     return ret
 
 
+
 # -- main check
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:])) # pragma: no cover
-
-
-
-
