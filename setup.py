@@ -42,14 +42,11 @@ setuptools.setup(
         'Discussions': 'https://github.com/dkrajzew/grebakker/discussions',
     },
     license='GPL',
-    # add modules
-    packages = ["grebakker", "tests"],
-    package_data={
-        'tests': []
-    },
+    packages = [""],
+    package_dir = { "": "grebakker" },
     entry_points = {
         'console_scripts': [
-            'grebakker = grebakker.grebakker:main'
+            'grebakker = grebakker:main'
         ]
     },
     # see https://pypi.org/classifiers/
