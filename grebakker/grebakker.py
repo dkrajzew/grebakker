@@ -91,7 +91,7 @@ class Log:
         self._written += 1
 
     def close(self) -> None:
-        """Closes the log file."""
+        """Close the log file."""
         if self._output is None:
             return
         if self._format=="json":
