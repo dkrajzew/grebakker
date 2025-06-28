@@ -24,13 +24,9 @@ import datetime
 import argparse
 import configparser
 import shutil
-import errno
 import zipfile
-import pathlib
 import fnmatch
-from typing import List
-from typing import Dict
-from typing import Any
+from typing import List, Dict, Any, Union, Generator
 
 
 # --- class definitions -----------------------------------------------------
@@ -50,11 +46,12 @@ class Log:
         self._written = 0
         self._output = None
         self._name = name
-        if off: return
+        if off:
+            return
         mode = "w" if restart else "a"
-        self._output = open(name, mode)
+        self._output = open(name, mode, encoding="utf-8")
         if self._format=="json":
-            self._output.write(f'[\n')
+            self._output.write('[\n')
 
     def write(self, act: str, src: str, dst: str, duration: str) -> None:
         """Write a log entry about a performed action.
@@ -98,7 +95,7 @@ class Log:
         if self._output is None:
             return
         if self._format=="json":
-            self._output.write(f'\n]\n')
+            self._output.write('\n]\n')
         self._output.close()
         
 
@@ -234,9 +231,9 @@ class Grebakker:
             self._action_end("copy", src, dst, level, t1)
             return
         exclude = [] if "exclude" not in item else item["exclude"]
-        exclude = [exclude] if not isinstance(exclude, list) else exclude
+        exclude = [exclude] if isinstance(exclude, str) else exclude
         t1 = self._action_begin("Copying", src, level)
-        for file in self._yield_files(src, exclude):
+        for file in self._yield_files(src, list(exclude)):
             fsrc = os.path.abspath(os.path.join(src, "..", file))
             fdst = os.path.abspath(os.path.join(dst, "..", file))
             if self._destination_exists("copy", os.path.join(src, file), fdst, level):
@@ -267,14 +264,14 @@ class Grebakker:
         if self._destination_exists("compress", src, dst, level):
             return
         exclude = [] if "exclude" not in item else item["exclude"]
-        exclude = [exclude] if not isinstance(exclude, list) else exclude
+        exclude = [exclude] if isinstance(exclude, str) else exclude
         t1 = self._action_begin("Compressing", src, level)
         zipf = zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED, compresslevel=9)
         if os.path.isfile(src):
             dstf = os.path.relpath(src, os.path.join(src, '..'))
             zipf.write(src, dstf)
         else:
-            for file in self._yield_files(src, exclude):
+            for file in self._yield_files(src, list(exclude)):
                 fsrc = os.path.join(src, "..", file)
                 dstf = os.path.relpath(os.path.join(root, file), os.path.join(src, '..'))
                 zipf.write(fsrc, dstf)
