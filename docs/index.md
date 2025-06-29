@@ -1,5 +1,5 @@
-[![License: GPL](https://img.shields.io/badge/License-GPL-green.svg)](https://github.com/dkrajzew/grebakker/blob/master/LICENSE)
-[![PyPI version](https://badge.fury.io/py/grebakker.svg)](https://pypi.python.org/pypi/grebakker)
+[![License: GPL](https://img.shields.io/badge/License-GPL-green.svg)](https://github.com/dkrajzew/grebakker/blob/main/LICENSE)
+[![PyPI version](https://badge.fury.io/py/grebakker.svg)](https://pypi.org/project/grebakker/)
 ![test](https://github.com/dkrajzew/grebakker/actions/workflows/test.yml/badge.svg)
 [![Downloads](https://pepy.tech/badge/grebakker)](https://pepy.tech/project/grebakker)
 [![Downloads](https://static.pepy.tech/badge/grebakker/week)](https://pepy.tech/project/grebakker)
@@ -17,7 +17,7 @@ __grebakker__ - a backup solution for hackers (just for the acronym :-) )
 
 __grebakker__ is a script that backups files and folders. __grebakker__ uses json to define what should be backupped and how - copied or compressed. The json files can reference each other. __grebakker__ does not need any external applications, libraries, or modules besides plain Python.
 
-__grebakker__ is in a very early development stage. I use it successfully, but there are different things that should be streamlined. It (currently) only supports complete backups, no incremental backups etc. **I would be glad to get any feedback on or contribution to this.**
+__grebakker__ is in a very early development stage. I use it successfully, but there are different things that should be streamlined. **I would be glad to get any feedback on or contribution to this.**
 
 
 ## Usage
@@ -42,7 +42,7 @@ Generate a backup definition of what to do in json and store it in the folder as
 Then run __grebakker__:
 
 ```cmd
-python src\grebakker.py backup f:\backup\2025_05 d:\
+python grebakker\grebakker.py backup f:\backup\2025_05 d:\
 ```
 
 That's all... Your files and folders are backupped to the subfolder ```d/``` of the ___destination folder___ ```f:\backup\2025_05``` - the file ```document.pdf``` and the folder ```old_backups``` are copied to the destination ```f:\backup\2025_05\d```, the folder ```repository``` and ```current``` are compressed (excluding the sub-folder ```venv``` in ```current```) and stored in ```f:\backup\2025_05\d``` as well. __grebakker__ continues with backupping using a backup definition stored in the sub-folder ```attic```.
@@ -59,13 +59,13 @@ Additional documentation includes a page with relevant [links](links.md) or the 
 
 ## Installation
 
-You may install the latest release using pip:
+The current version is 0.4.0. You may install the latest release using pip:
 
 ```console
 python -m pip install grebakker
 ```
 
-Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.2.0) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](install.md) which lists further options.
+Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker). There is also a page about [installing grebakker](install.md) which lists further options.
 
 
 ## License

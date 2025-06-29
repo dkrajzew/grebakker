@@ -5,7 +5,7 @@ __grebakker__ is a [Python](https://www.python.org/) script. To run it, you must
 
 ## Installing grebakker for Python
 
-The current version is [grebakker-0.2.0](https://github.com/dkrajzew/grebakker/releases/tag/0.2.0).
+The current version is [grebakker-0.4.0](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0).
 
 You have different options for installing __grebakker__.
 
@@ -25,6 +25,8 @@ You may then run __grebakker__ using
 grebakker
 ```
 
+This will install __grebakker__ as a script that may be directly called on the command line as well as the [Python](https://www.python.org/) module which you may import using ```import grebakker```.
+
 ### Cloning the repository
 
 You may __clone the repository__ which is available at [grebakker&apos;s github page](https://github.com/dkrajzew/grebakker).
@@ -40,14 +42,16 @@ You may then run __grebakker__ using
 python grebakker/grebakker.py
 ```
 
+Please note that the current repository version may be an in-between version with new, undescribed, or even buggy beviour. You should rather use a recent version.
+
 ### Download the latest release
 
-Besides, you may __download the current release__ here:
+Besides, you may __download the current source code release__ here:
 
-* [grebakker-0.2.0.zip](https://github.com/dkrajzew/grebakker/archive/refs/tags/0.2.0.zip)
-* [grebakker-0.2.0.tar.gz](https://github.com/dkrajzew/grebakker/archive/refs/tags/0.2.0.tar.gz)
+* [grebakker-0.4.0.zip](https://github.com/dkrajzew/grebakker/archive/refs/tags/0.4.0.zip)
+* [grebakker-0.4.0.tar.gz](https://github.com/dkrajzew/grebakker/archive/refs/tags/0.4.0.tar.gz)
 
-You will get the complete copy of the repository which you have to decompress. A folder named ```grebakker-0.2.0``` will be generated. __grebakker.py__ is stored in the ```grebakker``` folder.
+You will get the complete copy of the repository which you have to decompress. A folder named ```grebakker-0.4.0``` will be generated. __grebakker.py__ is stored in the ```grebakker``` folder.
 
 You may run __grebakker__ using 
 
