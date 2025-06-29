@@ -73,11 +73,13 @@ Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/
 
 ## Changes
 
+### Version 0.4.0 (29.06.2025)
+
+* a maintenance version that patches the command line execution
+
 ### Version 0.2.0 (24.06.2025)
 
 * an initial version
-
-The complete [ChangeLog](https://grebakker.readthedocs.io/en/latest/changes) is included in [the __grebakker__ documentation pages](https://grebakker.readthedocs.io/en/latest/).
 
 
 ## License
