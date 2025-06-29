@@ -46,7 +46,7 @@ setuptools.setup(
     package_dir = { "": "grebakker" },
     entry_points = {
         'console_scripts': [
-            'grebakker = grebakker:main'
+            'grebakker = grebakker:script_run'
         ]
     },
     # see https://pypi.org/classifiers/

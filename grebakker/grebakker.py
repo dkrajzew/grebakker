@@ -436,6 +436,10 @@ def main(arguments: List[str] = []) -> int:
     return ret
 
 
+def script_run() -> int:
+    """Execute from command line."""
+    sys.exit(main(sys.argv[1:])) # pragma: no cover
+
 
 # -- main check
 if __name__ == '__main__':
