@@ -6,7 +6,7 @@ __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
 __license__    = "GPL"
-__version__    = "0.2.0"
+__version__    = "0.4.0"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
@@ -27,7 +27,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="grebakker",
-    version="0.2.0",
+    version="0.4.0",
     author="dkrajzew",
     author_email="d.krajzewicz@gmail.com",
     description="greyrat's backupper for hackers",
