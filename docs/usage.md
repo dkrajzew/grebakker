@@ -41,13 +41,13 @@ You will find the following information in it:
 The synopsis of grebakker is briefly
 
 ```cmd
-python src\grebakker.py <ACTION> <DESTINATION> <SOURCE>
+grebakker <ACTION> <DESTINATION> <SOURCE>
 ```
 
 So given the file above, you may start __grebakker__ like this:
 
 ```cmd
-python src\grebakker.py backup f:\backup\2025_05 d:\
+grebakker backup f:\backup\2025_05 d:\
 ```
 
 

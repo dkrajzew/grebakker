@@ -45,7 +45,7 @@ Generate a backup definition of what to do in json and store it in the folder as
 Then run __grebakker__:
 
 ```cmd
-python src\grebakker.py backup f:\backup\2025_05 d:\
+grebakker backup f:\backup\2025_05 d:\
 ```
 
 That's all... Your files and folders are backupped to the subfolder ```d/``` of the ___destination folder___ ```f:\backup\2025_05``` - the file ```document.pdf``` and the folder ```old_backups``` are copied to the destination ```f:\backup\2025_05\d```, the folder ```repository``` and ```current``` are compressed (excluding the sub-folder ```venv``` in ```current```) and stored in ```f:\backup\2025_05\d``` as well. __grebakker__ continues with backupping using a backup definition stored in the sub-folder ```attic```.
@@ -67,7 +67,7 @@ __grebakker__ is licensed under the [GPLv3](license.md).
 
 ## Installation
 
-The __current version__ is [grebakker-0.4.0](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0).
+The __current version__ is [grebakker-0.4.2](https://github.com/dkrajzew/grebakker/releases/tag/0.4.2).
 
 You may __install grebakker__ using
 
@@ -75,10 +75,13 @@ You may __install grebakker__ using
 python -m pip install grebakker
 ```
 
-Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](https://grebakker.readthedocs.io/en/latest/install.html) which lists further options.
+Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.2) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](https://grebakker.readthedocs.io/en/latest/install.html) which lists further options.
 
 
 ## Changes
+
+### grebakker-0.4.2 (05.07.2025)
+* Documentation corrected
 
 ### Version 0.4.0 (29.06.2025)
 

@@ -59,13 +59,13 @@ Additional documentation includes a page with relevant [links](links.md) or the 
 
 ## Installation
 
-The current version is 0.4.0. You may install the latest release using pip:
+The current version is 0.4.2. You may install the latest release using pip:
 
 ```console
 python -m pip install grebakker
 ```
 
-Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker). There is also a page about [installing grebakker](install.md) which lists further options.
+Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.2) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker). There is also a page about [installing grebakker](install.md) which lists further options.
 
 
 ## License

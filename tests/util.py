@@ -6,7 +6,7 @@ __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
 __license__    = "GPL"
-__version__    = "0.4.0"
+__version__    = "0.4.2"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
@@ -117,7 +117,24 @@ def check_generated(tmp_path, actions, logpath, logformat, log_head="", testfile
             #with open(f"D:/{os.path.basename(action[2])}", "wb") as fd:
             #    fd.write(c)
             testfile = (action[4] + ".zip") if action[4] not in testfiles else testfiles[action[4]]
-            #assert are_equivalent(os.path.join(TEST_PATH, testfile), str(action[2]))
+            """
+            os.makedirs(os.path.join(tmp_path, "tmp_zip"), exist_ok=True)
+            with zipfile.ZipFile(Path(TEST_PATH) / testfile, 'r') as zip_ref:
+                zip_ref.extractall(os.path.join(tmp_path, "tmp_zip"))
+            zipf = zipfile.ZipFile(os.path.join(tmp_path, "tmp.zip"), "w", zipfile.ZIP_DEFLATED, compresslevel=9)
+            for root, dirs, files in os.walk(os.path.join(tmp_path, "tmp_zip")):
+                for file in files:
+                    srcf = os.path.join(root, file)
+                    dstf = os.path.relpath(os.path.join(root, file), os.path.join(tmp_path, "tmp_zip"))
+                    zipf.write(srcf, dstf)
+            zipf.close()
+            c = bread(Path(os.path.join(tmp_path, "tmp.zip")))
+            with open(f"D:/tmp.zip", "wb") as fd:
+                fd.write(c)
+            """
+            assert are_equivalent(os.path.join(TEST_PATH, testfile), str(action[2]))
+            #assert bread(Path(os.path.join(tmp_path, "tmp.zip"))) == bread(action[2])
+            #assert bread(Path(TEST_PATH) / testfile) == bread(action[2])
         elif action[0]=="sub":
             continue
         else:
