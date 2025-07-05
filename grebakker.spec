@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 a = Analysis(
-    ['src/grebakker.py'],
-    pathex=["src"],
+    ['grebakker/grebakker.py'],
+    pathex=["grebakker"],
     binaries=[],
     datas=[],
     hiddenimports=[],
