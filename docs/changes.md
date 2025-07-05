@@ -1,5 +1,8 @@
 # ChangeLog for grebakker
 
+## grebakker-0.4.4 (05.07.2025)
+* Patching tests
+
 ## grebakker-0.4.2 (05.07.2025)
 * Documentation corrected
 

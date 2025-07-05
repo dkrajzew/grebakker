@@ -67,7 +67,7 @@ __grebakker__ is licensed under the [GPLv3](license.md).
 
 ## Installation
 
-The __current version__ is [grebakker-0.4.2](https://github.com/dkrajzew/grebakker/releases/tag/0.4.2).
+The __current version__ is [grebakker-0.4.4](https://github.com/dkrajzew/grebakker/releases/tag/0.4.4).
 
 You may __install grebakker__ using
 
@@ -75,10 +75,13 @@ You may __install grebakker__ using
 python -m pip install grebakker
 ```
 
-Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.2) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](https://grebakker.readthedocs.io/en/latest/install.html) which lists further options.
+Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.4) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](https://grebakker.readthedocs.io/en/latest/install.html) which lists further options.
 
 
 ## Changes
+
+## grebakker-0.4.4 (05.07.2025)
+* Patching tests
 
 ### grebakker-0.4.2 (05.07.2025)
 * Documentation corrected

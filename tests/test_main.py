@@ -6,7 +6,7 @@ __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
 __license__    = "GPL"
-__version__    = "0.4.2"
+__version__    = "0.4.4"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
@@ -113,7 +113,7 @@ def test_main_version(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==0
     captured = capsys.readouterr()
-    assert patch(captured.out) == """grebakker 0.4.2
+    assert patch(captured.out) == """grebakker 0.4.4
 """
     assert patch(captured.err) == ""
 

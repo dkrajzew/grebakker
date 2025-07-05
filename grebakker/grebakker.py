@@ -6,7 +6,7 @@ __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2025, Daniel Krajzewicz"
 __credits__    = "Daniel Krajzewicz"
 __license__    = "GPL"
-__version__    = "0.4.2"
+__version__    = "0.4.4"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
@@ -383,7 +383,7 @@ def main(arguments: List[str] = []) -> int:
     parser.add_argument("action" if "action" not in defaults else "--action")
     parser.add_argument("destination" if "destination" not in defaults else "--destination")
     parser.add_argument("definition" if "definition" not in defaults else "--definition")
-    parser.add_argument('--version', action='version', version='%(prog)s 0.4.2')
+    parser.add_argument('--version', action='version', version='%(prog)s 0.4.4')
     parser.add_argument('--continue', dest="cont", action="store_true", help="Continues a stopped backup.")
     parser.add_argument('--log-name', default="grebakker_log.csv", help="Change logfile name (default: 'grebakker_log.csv').")
     parser.add_argument('--log-restart', action="store_true", help="An existing logfile will be removed.")
