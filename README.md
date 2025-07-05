@@ -80,7 +80,7 @@ Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/
 
 ## Changes
 
-## grebakker-0.4.4 (05.07.2025)
+### grebakker-0.4.4 (05.07.2025)
 * Patching tests
 
 ### grebakker-0.4.2 (05.07.2025)
