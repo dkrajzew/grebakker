@@ -53,22 +53,29 @@ That's all... Your files and folders are backupped to the subfolder ```d/``` of 
 
 ## Documentation
 
-__grebakker__ is meant to be run on the command line. The documentation consists of a [user manual](usage.md) and a [man-page like call documentation](cmd.md) (yet incomplete). The [glossary](glossary.md) may be of help.
+__grebakker__ is meant to be run on the command line. The documentation consists of a [user manual](https://grebakker.readthedocs.io/en/latest/usage.html) and a [man-page like call documentation](https://grebakker.readthedocs.io/en/latest/cmd.html) (yet incomplete). The [glossary](https://grebakker.readthedocs.io/en/latest/glossary.html) may be of help.
 
 If you want to contribute, you may check the [API documentation](api_grebakker.md) or visit [grebakker on github](https://github.com/dkrajzew/grebakker) where besides the code you may find the [grebakker issue tracker](https://github.com/dkrajzew/grebakker/issues) or [discussions about grebakker](https://github.com/dkrajzew/grebakker/discussions).
 
-Additional documentation includes a page with relevant [links](links.md) or the [ChangeLog](changes.md).
+Additional documentation includes a page with relevant [links](https://grebakker.readthedocs.io/en/latest/links.html) or the [ChangeLog](https://grebakker.readthedocs.io/en/latest/changes.html).
+
+
+## License
+
+__grebakker__ is licensed under the [GPLv3](license.md).
 
 
 ## Installation
 
-You may install the latest release using pip:
+The __current version__ is [grebakker-0.4.0](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0).
+
+You may __install grebakker__ using
 
 ```console
 python -m pip install grebakker
 ```
 
-Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.2.0) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](install.md) which lists further options.
+Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/tag/0.4.0) from github. You may as well clone or download the [grebakker git repository](https://github.com/dkrajzew/grebakker.git). There is also a page about [installing grebakker](https://grebakker.readthedocs.io/en/latest/install.html) which lists further options.
 
 
 ## Changes
@@ -82,9 +89,9 @@ Or download the [latest release](https://github.com/dkrajzew/grebakker/releases/
 * an initial version
 
 
-## License
+### Older versions
 
-__grebakker__ is licensed under the [GPLv3](license.md).
+You may find the complete change log at [the grebakker documentation pages](https://grebakker.readthedocs.io/en/latest/).
 
 
 ## Background
