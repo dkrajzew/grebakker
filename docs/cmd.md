@@ -3,7 +3,7 @@
 ## Synopsis
 
 ```cmd
-python src\grebakker.py backup f:\backup\2025_05 d:\
+grebakker backup f:\backup\2025_05 d:\
 ```
 
 
@@ -58,7 +58,7 @@ When **--version** is set, a version information will be printed and __grebakker
 ## Examples
 
 ```cmd
-python src\grebakker.py backup f:\backup\2025_05 d:\
+grebakker backup f:\backup\2025_05 d:\
 ```
 
 Will backup files into the destination folder ```f:\backup\2025_05``` using the definition ```grebakker.json``` located in ```d:\```.

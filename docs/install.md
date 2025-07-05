@@ -42,7 +42,7 @@ You may then run __grebakker__ using
 python grebakker/grebakker.py
 ```
 
-Please note that the current repository version may be an in-between version with new, undescribed, or even buggy beviour. You should rather use a recent version.
+Please note that the current repository version may be an in-between version with new, undescribed, or even buggy behaviour. You should rather use a recent version.
 
 ### Download the latest release
 

@@ -15,7 +15,7 @@ __grebakker__ - a backup solution for hackers (just for the acronym :-) )
 
 ## Introduction
 
-__grebakker__ is a script that backups files and folders. __grebakker__ uses json to define what should be backupped and how - copied or compressed. The json files can reference each other. __grebakker__ does not need any external applications, libraries, or modules besides plain Python.
+__grebakker__ is a zero-dependency [Python](https://www.python.org/) script that backups files and folders. __grebakker__ uses json to define what should be backupped and how - copied or compressed. The json files can reference each other. __grebakker__ does not need any external applications, libraries, or modules besides plain Python.
 
 __grebakker__ is in a very early development stage. I use it successfully, but there are different things that should be streamlined. **I would be glad to get any feedback on or contribution to this.**
 
@@ -42,7 +42,7 @@ Generate a backup definition of what to do in json and store it in the folder as
 Then run __grebakker__:
 
 ```cmd
-python grebakker\grebakker.py backup f:\backup\2025_05 d:\
+grebakker backup f:\backup\2025_05 d:\
 ```
 
 That's all... Your files and folders are backupped to the subfolder ```d/``` of the ___destination folder___ ```f:\backup\2025_05``` - the file ```document.pdf``` and the folder ```old_backups``` are copied to the destination ```f:\backup\2025_05\d```, the folder ```repository``` and ```current``` are compressed (excluding the sub-folder ```venv``` in ```current```) and stored in ```f:\backup\2025_05\d``` as well. __grebakker__ continues with backupping using a backup definition stored in the sub-folder ```attic```.
